@@ -1,0 +1,33 @@
+﻿using Core.Contracts.Models;
+using Core.Domain.Abstractions;
+
+namespace Core.Domain.Projects.ValueObjects;
+public sealed record AssignmentStatus : ValueObject
+{
+    private AssignmentStatus() { }
+
+    public enum AssignmentStatusEnum 
+    {
+        ToDo = 1,
+        InProgress = 2,
+        Done = 3
+    }
+
+    public AssignmentStatusEnum Value { get; set; }
+
+    public DomainResult<AssignmentStatus> Create(AssignmentStatusEnum value)
+    {
+        if (!Enum.IsDefined(typeof(AssignmentStatusEnum), value))
+        {
+            return DomainResult<AssignmentStatus>.Failure()
+                                                 .WithErrors([DomainErrors.AssignmentErrors.INVALID_ASSIGNMENT_STATUS]);
+        }
+
+        AssignmentStatus assignmentStatus = new()
+        {
+            Value = value
+        };
+        return DomainResult<AssignmentStatus>.Success()
+                                             .WithValue(assignmentStatus);
+    }
+}

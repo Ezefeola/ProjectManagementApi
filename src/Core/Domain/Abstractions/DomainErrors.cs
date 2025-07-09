@@ -12,4 +12,9 @@ public static class DomainErrors
 
         public static readonly string ONE_TIME_PASSWORD_NOT_EMPTY = "OneTimePassword cannot be empty.";
     }
+
+    public static class AssignmentErrors
+    {
+        public static readonly string INVALID_ASSIGNMENT_STATUS = "Invalid assignment status value.";
+    }
 }
