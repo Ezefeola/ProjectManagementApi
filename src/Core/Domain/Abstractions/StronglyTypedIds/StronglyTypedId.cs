@@ -1,4 +1,6 @@
-﻿namespace Core.Contracts.Models;
+﻿using Core.Contracts.Models;
+
+namespace Core.Domain.Abstractions.StronglyTypedIds;
 public abstract record StronglyTypedId<TId> : ValueObject
     where TId : notnull
 {
@@ -9,7 +11,7 @@ public abstract record StronglyTypedId<TId> : ValueObject
         Value = value;
     }
 
-    public TId Value { get; } = default!;
+    public TId Value { get; init; } = default!;
 
     public override string ToString() => Value.ToString() ?? string.Empty;
 }

@@ -3,7 +3,7 @@ using Core.Domain.Abstractions.ValueObjects;
 using Core.Domain.Users.ValueObjects;
 
 namespace Core.Domain.Users;
-public class User : AggregateRoot<UserId>
+public sealed class User : AggregateRoot<UserId>
 {
     public static class ColumnNames
     {
