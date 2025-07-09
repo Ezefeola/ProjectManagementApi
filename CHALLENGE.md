@@ -37,7 +37,7 @@ Build a **RESTful API** for managing projects, collaborators, and assignments, f
 
 ### User
 
-- Properties:  
+- Properties:
 ```csharp
 UserId Id;
 string Username;
@@ -46,7 +46,9 @@ byte[] PasswordHash;
 byte[] PasswordSalt;
 UserRole Role;
 CollaboratorId? CollaboratorId; // optional
+```
 
+---
 
 ### Collaborator
 
@@ -55,27 +57,33 @@ CollaboratorId? CollaboratorId; // optional
 CollaboratorId Id;
 string FullName;
 string Email;
+```
 
-Relationships:
-Has many Assignments
+- Relationships:
+  - Has many `Assignments`
+  - Many-to-many with `Projects` via `ProjectCollaborator`
 
-Many-to-many with Projects via ProjectCollaborator
+---
 
 ### Project
-- Properties:
 
+- Properties:
 ```csharp
 ProjectId Id;
 string Name;
 DateTime StartDate;
 DateTime? EndDate;
 ProjectStatus Status;
+```
 
 - Relationships:
-Has many Assignments
-Many-to-many with Collaborators via ProjectCollaborator
+  - Has many `Assignments`
+  - Many-to-many with `Collaborators` via `ProjectCollaborator`
+
+---
 
 ### Assignment
+
 - Properties:
 ```csharp
 AssignmentId Id;
@@ -84,16 +92,24 @@ string? Description;
 decimal EstimatedHours;
 decimal LoggedHours;
 AssignmentStatus Status;
+```
 
 - Relationships:
-Belongs to one Project
-Optionally assigned to one Collaborator
+  - Belongs to one `Project`
+  - Optionally assigned to one `Collaborator`
+
+---
 
 ### Enums
+
 ```csharp
 public enum UserRole { Admin, Manager, Collaborator }
+
 public enum ProjectStatus { Planned, InProgress, Completed, Cancelled }
+
 public enum AssignmentStatus { Todo, InProgress, Done }
+```
+
 
 ## Requirements
 
