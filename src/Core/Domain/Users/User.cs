@@ -1,6 +1,5 @@
 ﻿using Core.Domain.Abstractions;
 using Core.Domain.Abstractions.ValueObjects;
-using Core.Domain.Users.Entities;
 using Core.Domain.Users.ValueObjects;
 
 namespace Core.Domain.Users;
@@ -13,7 +12,7 @@ public class User : AggregateRoot<UserId>
         public const string LastName = "LastName";
         public const string Email = "Email";
         public const string Password = "Password";
-        public const string RoleId = "RoleId";
+        public const string UserRole = "UserRole";
     }
     public static class Rules
     {
@@ -26,25 +25,22 @@ public class User : AggregateRoot<UserId>
         public const int EMAIL_MAX_LENGTH = 255;
         public const int EMAIL_MIN_LENGTH = 1;
 
-        public const int OTP_HASH_MAX_LENGTH = 6;
-        public const int OTP_MAX_LENGTH = 6;
+        public const int PASSWORD_MAX_LENGTH = 250;
     }
+
+    private User() { }
 
     public FullName FullName { get; private set; } = default!;
     public EmailAddress EmailAddress { get; private set; } = default!;
-    public string Password { get; set; } = default!;
-
-    public RoleId RoleId { get; private set; } = default!;
-    public Role? Role { get; private set; }
-
-    private User() { }
+    public string Password { get; private set; } = default!;
+    public UserRole UserRole { get; private set; } = default!;
 
     public static DomainResult<User> Create(
         string firstName,
         string lastName,
         string email,
-        string otpHash,
-        Guid roleId,
+        string password,
+        UserRole.UserRolesEnum userRole,
         DateTime? createdAt = default!
     )
     {
@@ -62,11 +58,11 @@ public class User : AggregateRoot<UserId>
                                      .WithErrors(emailAddressResult.Errors);
         }
 
-        DomainResult<RoleId> roleIdResult = RoleId.Create(roleId);
-        if (!roleIdResult.IsSuccess)
+        DomainResult<UserRole> userRoleResult = UserRole.Create(userRole);
+        if (!userRoleResult.IsSuccess)
         {
             return DomainResult<User>.Failure()
-                                     .WithErrors(roleIdResult.Errors);
+                                     .WithErrors(userRoleResult.Errors);
         }
 
         User user = new()
@@ -74,7 +70,7 @@ public class User : AggregateRoot<UserId>
             Id = UserId.NewId(),
             EmailAddress = emailAddressResult.Value,
             FullName = fullNameResult.Value,
-            RoleId = roleIdResult.Value
+            UserRole = userRoleResult.Value
         };
 
         if (createdAt.HasValue)
@@ -91,7 +87,7 @@ public class User : AggregateRoot<UserId>
        string? firstName,
        string? lastName,
        string? email,
-       Guid? roleId
+       UserRole.UserRolesEnum? userRole
    )
     {
         List<string> errors = [];
@@ -105,9 +101,9 @@ public class User : AggregateRoot<UserId>
         if (!emailResult.IsSuccess) errors.AddRange(emailResult.Errors);
         totalUpdatedCount += emailResult.UpdatedFieldCount;
 
-        DomainResult<User> roleIdResult = UpdateRoleId(roleId);
-        if (!roleIdResult.IsSuccess) errors.AddRange(roleIdResult.Errors);
-        totalUpdatedCount += roleIdResult.UpdatedFieldCount;
+        DomainResult<User> userRoleResult = UpdateUserRole(userRole);
+        if (!userRoleResult.IsSuccess) errors.AddRange(userRoleResult.Errors);
+        totalUpdatedCount += userRoleResult.UpdatedFieldCount;
 
         if (errors.Count > 0)
         {
@@ -151,17 +147,18 @@ public class User : AggregateRoot<UserId>
                                  .WithUpdatedFieldCount(result.UpdatedFieldCount);
     }
 
-    public DomainResult<User> UpdateRoleId(Guid? newValue)
+    public DomainResult<User> UpdateUserRole(UserRole.UserRolesEnum? userRole)
     {
-        DomainResult<RoleId> result = RoleId.UpdateIfChanged(RoleId, newValue);
+        DomainResult<UserRole> userRoleResult = UserRole.UpdateIfChanged(userRole);
+        if (!userRoleResult.IsSuccess)
+        {
+            return DomainResult<User>.Failure()
+                                     .WithErrors(userRoleResult.Errors);
+        }
 
-        if (!result.IsSuccess)
-            return DomainResult<User>.Failure().WithErrors(result.Errors);
-
-        RoleId = result.Value;
         return DomainResult<User>.Success()
                                  .WithValue(this)
-                                 .WithUpdatedFieldCount(result.UpdatedFieldCount);
+                                 .WithUpdatedFieldCount(userRoleResult.UpdatedFieldCount);
     }
 
     public void SoftDelete()
