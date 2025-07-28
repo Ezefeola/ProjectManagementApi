@@ -15,22 +15,12 @@ public class UserConfiguration : EntityTypeBaseConfiguration<User>
                   value => UserId.NewEfId(value)
                )
                .HasColumnName(User.ColumnNames.Id)
-               .ValueGeneratedOnAdd();
-
-        builder.Property(x => x.RoleId)
-               .HasConversion(
-                   roleId => roleId.Value,
-                   value => RoleId.NewEfId(value)
-               )
-               .HasColumnName(User.ColumnNames.RoleId);
-        builder.HasOne(x => x.Role)
-               .WithMany(x => x.Users)
-               .HasForeignKey(x => x.RoleId);
+               .ValueGeneratedNever();
     }
 
     protected override void ConfigurateProperties(EntityTypeBuilder<User> builder)
     {
-        builder.OwnsOne(f => f.FullName, fullNameBuilder =>
+        builder.ComplexProperty(f => f.FullName, fullNameBuilder =>
         {
             fullNameBuilder.Property(x => x.FirstName)
                            .IsRequired()
@@ -43,16 +33,20 @@ public class UserConfiguration : EntityTypeBaseConfiguration<User>
                            .HasColumnName(User.ColumnNames.LastName);
         });
 
-        builder.OwnsOne(x => x.EmailAddress, emailBuilder =>
+        builder.ComplexProperty(x => x.EmailAddress, emailBuilder =>
         {
             emailBuilder.Property(x => x.Value)
                         .IsRequired()
                         .HasMaxLength(User.Rules.EMAIL_MAX_LENGTH)
                         .HasColumnName(User.ColumnNames.Email);
-
-            emailBuilder.HasIndex(x => x.Value)
-                        .IsUnique();
         });
+        builder.Property<string>(User.ColumnNames.Email)
+               .HasColumnName(User.ColumnNames.Email);
+        builder.HasIndex(User.ColumnNames.Email)
+               .IsUnique();
+
+        builder.Property(x => x.Password)
+               .HasColumnName(User.ColumnNames.Password);    
 
         BaseEntityConfig.ApplyTo<User, UserId>(builder);
     }

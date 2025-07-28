@@ -9,13 +9,29 @@ public class UnitOfWork : IUnitOfWork
     private readonly ApplicationDbContext _dbContext;
     public IUserRepository UserRepository { get; }
 
+    public IProjectRepository ProjectRepository { get; }
+
+    public ICollaboratorRepository CollaboratorRepository { get; }
+
+    public IAssignmentRepository AssignmentRepository { get; }
+
+    public IProjectCollaboratorRepository ProjectCollaboratorRepository { get; }
+
     public UnitOfWork(
         ApplicationDbContext context,
-        IUserRepository userRepository
+        IUserRepository userRepository,
+        IProjectRepository projectRepository,
+        ICollaboratorRepository collaboratorRepository,
+        IAssignmentRepository assignmentRepository,
+        IProjectCollaboratorRepository projectCollaboratorRepository
     )
     {
         _dbContext = context;
         UserRepository = userRepository;
+        ProjectRepository = projectRepository;
+        CollaboratorRepository = collaboratorRepository;
+        AssignmentRepository = assignmentRepository;
+        ProjectCollaboratorRepository = projectCollaboratorRepository;
     }
 
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)

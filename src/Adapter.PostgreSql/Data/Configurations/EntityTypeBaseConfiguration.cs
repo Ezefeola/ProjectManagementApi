@@ -21,16 +21,16 @@ public static class BaseEntityConfig
         where TId : notnull
     {
         builder.Property(e => e.CreatedAt)
-               .HasColumnType("timestamp with time zone")
+               .HasColumnType("datetime")
                .HasDefaultValueSql("NOW()")
                .ValueGeneratedOnAdd();
 
         builder.Property(e => e.UpdatedAt)
-               .HasColumnType("timestamp with time zone")
+               .HasColumnType("datetime")
                .ValueGeneratedOnUpdate();
 
         builder.Property(e => e.DeletedAt)
-               .HasColumnType("timestamp with time zone");
+               .HasColumnType("datetime");
 
         builder.HasQueryFilter(e => !e.IsDeleted);
 

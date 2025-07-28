@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
+using Core.Contracts.UseCases.Users;
 using Core.Services.Encrypt;
 using Core.Services.Token;
+using Core.UseCases.Users;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +30,10 @@ public static class ServiceCollectionExtensions
 
     private static void AddUseCases(this IServiceCollection services)
     {
-
+        services.AddUserUseCases();
+    }
+    private static void AddUserUseCases(this IServiceCollection services)
+    {
+        services.AddScoped<ICreateUser, CreateUser>();
     }
 }

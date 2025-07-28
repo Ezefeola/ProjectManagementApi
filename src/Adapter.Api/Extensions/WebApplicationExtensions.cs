@@ -28,7 +28,7 @@ public static class WebApplicationExtensions
             app.MapOpenApi("/api/openapi/v1.json");
             app.MapScalarApiReference("/api/scalar", options =>
             {
-                options.WithTitle("Template-Hexagonal-DDD Backend API")
+                options.WithTitle("Project Management API")
                        .WithOpenApiRoutePattern("/api/openapi/v1.json")
                        .WithTheme(ScalarTheme.BluePlanet)
                        .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient)

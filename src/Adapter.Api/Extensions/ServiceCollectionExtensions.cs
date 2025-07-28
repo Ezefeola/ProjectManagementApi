@@ -1,5 +1,7 @@
 ﻿using Adapter.Api.Configurations.OpenApiConfig;
 using Adapter.Api.ExceptionHandlers;
+using Core.Domain.Users;
+using Core.Domain.Users.ValueObjects;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
@@ -16,11 +18,27 @@ public static class ServiceCollectionExtensions
         services.AddCustomExceptionHandlerConfig();
         services.AddApiAuthorizationConfig();
         services.AddHttpContextAccessorConfig();
+        services.AddAuthorizationPoliciesConfig();
     }
 
     private static void AddHttpContextAccessorConfig(this IServiceCollection services)
     {
         services.AddHttpContextAccessor();
+    }
+
+    private static void AddAuthorizationPoliciesConfig(this IServiceCollection services)
+    {
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy(User.AuthorizationPolicies.RequireAdmin, policy =>
+                policy.RequireRole(UserRole.UserRolesEnum.Admin.ToString()));
+
+            options.AddPolicy(User.AuthorizationPolicies.RequireManager, policy =>
+                policy.RequireRole(UserRole.UserRolesEnum.Manager.ToString()));
+
+            options.AddPolicy(User.AuthorizationPolicies.RequireCollaborator, policy =>
+                policy.RequireRole(UserRole.UserRolesEnum.Collaborator.ToString()));
+        });
     }
 
     private static void AddJwtAuthenticationConfig(this IServiceCollection services, IConfiguration configuration)

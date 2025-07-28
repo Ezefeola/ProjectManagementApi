@@ -9,7 +9,7 @@ public abstract record StronglyTypedGuidId<TId> : StronglyTypedId<Guid>
     public static TId NewId()
     {
         return new TId()
-        { 
+        {
             Value = Guid.CreateVersion7() 
         };
     }
@@ -17,7 +17,7 @@ public abstract record StronglyTypedGuidId<TId> : StronglyTypedId<Guid>
     public static TId NewEfId(Guid value)
     {
         return new TId() 
-        { 
+        {
             Value = value 
         };
     }
@@ -36,6 +36,6 @@ public abstract record StronglyTypedGuidId<TId> : StronglyTypedId<Guid>
         };
 
         return DomainResult<TId>.Success()
-                                  .WithValue(id);
+                                .WithValue(id);
     }
 }

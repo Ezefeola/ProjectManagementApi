@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Contracts.DTOs.Auth.Request;
+using Core.Utilities.Validations;
+using FluentValidation;
 
-namespace Core.UseCases.Auth.Validators
+namespace Core.UseCases.Auth.Validators;
+public class LoginValidator : AbstractValidator<LoginRequestDto>
 {
-    internal class LoginValidator
-    {
+	public LoginValidator()
+	{
+		RuleFor(x => x.Email)
+			.NotEmpty()
+				.WithMessage(ValidationMessages.NOT_EMPTY)
+			.EmailAddress()
+				.WithMessage(ValidationMessages.INVALID_EMAIL);
+
+		RuleFor(x => x.Password)
+			.NotEmpty()
+				.WithMessage(ValidationMessages.NOT_EMPTY);
     }
 }

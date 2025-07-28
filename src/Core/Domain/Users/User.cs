@@ -3,7 +3,7 @@ using Core.Domain.Abstractions.ValueObjects;
 using Core.Domain.Users.ValueObjects;
 
 namespace Core.Domain.Users;
-public sealed class User : AggregateRoot<UserId>
+public sealed class User : Entity<UserId>
 {
     public static class ColumnNames
     {
@@ -16,18 +16,24 @@ public sealed class User : AggregateRoot<UserId>
     }
     public static class Rules
     {
-        public const int FIRSTNAME_MAX_LENGTH = 100;
-        public const int FIRSTNAME_MIN_LENGTH = 1;
+        public const int FIRST_NAME_MAX_LENGTH = 100;
+        public const int FIRST_NAME_MIN_LENGTH = 1;
 
-        public const int LASTNAME_MAX_LENGTH = 100;
-        public const int LASTNAME_MIN_LENGTH = 1;
+        public const int LAST_NAME_MAX_LENGTH = 100;
+        public const int LAST_NAME_MIN_LENGTH = 1;
 
         public const int EMAIL_MAX_LENGTH = 255;
-        public const int EMAIL_MIN_LENGTH = 1;
+        public const int EMAIL_MIN_LENGTH = 2;
 
         public const int PASSWORD_MAX_LENGTH = 250;
+        public const int PASSWORD_MIN_LENGTH = 8;
     }
-
+    public static class AuthorizationPolicies
+    {
+        public const string RequireAdmin = "RequireAdmin";
+        public const string RequireManager = "RequireManager";
+        public const string RequireCollaborator = "RequireCollaborator";
+    }
     private User() { }
 
     public FullName FullName { get; private set; } = default!;
@@ -70,7 +76,7 @@ public sealed class User : AggregateRoot<UserId>
             Id = UserId.NewId(),
             EmailAddress = emailAddressResult.Value,
             FullName = fullNameResult.Value,
-            UserRole = userRoleResult.Value
+            UserRole = userRoleResult.Value,
         };
 
         if (createdAt.HasValue)
@@ -83,6 +89,25 @@ public sealed class User : AggregateRoot<UserId>
                                  .WithValue(user);
     }
 
+    public DomainResult<User> SetPasswordHash(string passwordHash)
+    {
+        List<string> errors = [];
+
+        if (string.IsNullOrWhiteSpace(passwordHash)) errors.Add(DomainErrors.UserErrors.PASSWORD_NOT_EMPTY);
+
+        if(passwordHash.Length > Rules.PASSWORD_MAX_LENGTH) errors.Add(DomainErrors.UserErrors.PASSWORD_TOO_LONG);
+
+        if(errors.Count > 0)
+        {
+            return DomainResult<User>.Failure()
+                                     .WithErrors(errors);
+        }
+
+        Password = passwordHash;
+        return DomainResult<User>.Success()
+                                 .WithValue(this);
+
+    }   
     public DomainResult<User> Update(
        string? firstName,
        string? lastName,

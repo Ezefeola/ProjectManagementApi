@@ -15,9 +15,9 @@ public sealed record AssignmentStatus : ValueObject
 
     public AssignmentStatusEnum Value { get; set; }
 
-    public DomainResult<AssignmentStatus> Create(AssignmentStatusEnum value)
+    public static DomainResult<AssignmentStatus> Create(AssignmentStatusEnum value)
     {
-        if (!Enum.IsDefined(typeof(AssignmentStatusEnum), value))
+        if (!Enum.IsDefined(value))
         {
             return DomainResult<AssignmentStatus>.Failure()
                                                  .WithErrors([DomainErrors.AssignmentErrors.INVALID_ASSIGNMENT_STATUS]);
