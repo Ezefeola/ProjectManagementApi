@@ -67,7 +67,7 @@ public sealed class Project : AggregateRoot<ProjectId>
 
     public DomainResult<Project> AddAssignment(
         string title,
-        decimal estimatedHours,
+        decimal? estimatedHours,
         AssignmentStatus.AssignmentStatusEnum status,
         string? description,
         Guid? userId

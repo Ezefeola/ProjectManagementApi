@@ -32,5 +32,6 @@ public static class DomainErrors
         public static readonly string STATUS_TOO_LONG = $"The Status field cannot exceed {Project.Rules.STATUS_MAX_LENGTH} characters.";
         public static readonly string INVALID_STATUS = "Invalid status assignment, please assign a correct one.";
         public static readonly string INVALID_ASSIGNMENT_PROJECT_COMPLETED = "Cannot add an assignment to a completed project.";
+        public static readonly string PROJECT_NOT_FOUND = "Project not found.";
     }   
 }

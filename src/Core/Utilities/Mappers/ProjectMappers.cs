@@ -12,13 +12,22 @@ public static class ProjectMappers
             Name = project.Name,
             StartDate = project.ProjectPeriod.StartDate,
             EndDate = project.ProjectPeriod.EndDate,
-            Status = project.Status.Value
+            Status = project.Status.Value,
+            AssignmentsResponseDto = [.. project.Assignments.Select(x => x.ToAssignmentResponseDto())],
         };
     }
 
     public static CreateProjectResponseDto ToCreateProjectResponseDto(this Project project)
     {
         return new CreateProjectResponseDto
+        {
+            ProjectResponseDto = project.ToProjectResponseDto()
+        };
+    }
+
+    public static CreateAssignmentResponseDto ToCreateAssignmentResponseDto(this Project project)
+    {
+        return new CreateAssignmentResponseDto()
         {
             ProjectResponseDto = project.ToProjectResponseDto()
         };

@@ -1,8 +1,13 @@
 ﻿using Core.Contracts.DTOs.Projects.Request;
 using Core.Contracts.DTOs.Projects.Response;
+using Core.Contracts.Models;
 using Core.Contracts.Result;
 using Core.Contracts.UnitOfWork;
+using Core.Domain.Abstractions;
+using Core.Domain.Projects;
 using Core.Domain.Projects.Entities;
+using Core.Domain.Projects.ValueObjects;
+using Core.Utilities.Mappers;
 using FluentValidation;
 using FluentValidation.Results;
 using System.Net;
@@ -34,19 +39,45 @@ public class CreateAssignment
                                                       .WithErrors([..validatorResult.Errors.Select(e => e.ErrorMessage)]);
         }
 
-        DomainResult<Assignment> assignmentResult = Assignment.Create(
+        DomainResult<ProjectId> projectIdResult = ProjectId.Create(requestDto.ProjectId);
+        if(!projectIdResult.IsSuccess)
+        {
+            return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.BadRequest)
+                                                      .WithErrors(projectIdResult.Errors);
+        }
+
+        Project? project = await _unitOfWork.ProjectRepository.GetByIdAsync(
+            projectIdResult.Value,
+            cancellationToken
+        );
+        if(project is null)
+        {
+            return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.NotFound)
+                                                      .WithErrors([DomainErrors.ProjectErrors.PROJECT_NOT_FOUND]);
+        }
+
+        DomainResult<Project> addAssignmentResult = project.AddAssignment(
             requestDto.Title,
             requestDto.EstimatedHours,
             requestDto.Status,
             requestDto.Description,
             requestDto.UserId
         );
-        if(!assignmentResult.IsSuccess)
+        if(!addAssignmentResult.IsSuccess)
         {
             return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.BadRequest)
-                                                      .WithErrors(assignmentResult.Errors);
+                                                      .WithErrors(addAssignmentResult.Errors);
         }
 
-        await _unitOfWork.AssignmentRepository.AddAsync(assignmentResult.Value, cancellationToken);
+        SaveResult saveResult = await _unitOfWork.CompleteAsync(cancellationToken);
+        if(!saveResult.IsSuccess)
+        {
+            return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.InternalServerError)
+                                                      .WithErrors([saveResult.ErrorMessage]);
+        }
+
+        CreateAssignmentResponseDto responseDto = project.ToCreateAssignmentResponseDto();
+        return Result<CreateAssignmentResponseDto>.Success(HttpStatusCode.Created)
+                                                  .WithPayload(responseDto);
     }
 }

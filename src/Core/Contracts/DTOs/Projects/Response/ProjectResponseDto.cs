@@ -1,4 +1,5 @@
-﻿using Core.Domain.Projects.ValueObjects;
+﻿using Core.Contracts.DTOs.Assignment.Response;
+using Core.Domain.Projects.ValueObjects;
 
 namespace Core.Contracts.DTOs.Projects.Response;
 public sealed record ProjectResponseDto
@@ -8,4 +9,5 @@ public sealed record ProjectResponseDto
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public ProjectStatus.ProjectStatusEnum Status { get; set; }
+    public List<AssignmentResponseDto> AssignmentsResponseDto { get; set; } = [];
 }
