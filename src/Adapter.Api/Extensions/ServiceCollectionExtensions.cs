@@ -3,9 +3,11 @@ using Adapter.Api.ExceptionHandlers;
 using Core.Domain.Users;
 using Core.Domain.Users.ValueObjects;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Adapter.Api.Extensions;
 public static class ServiceCollectionExtensions
@@ -19,6 +21,11 @@ public static class ServiceCollectionExtensions
         services.AddApiAuthorizationConfig();
         services.AddHttpContextAccessorConfig();
         services.AddAuthorizationPoliciesConfig();
+
+        services.Configure<JsonOptions>(options =>
+        {
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
     }
 
     private static void AddHttpContextAccessorConfig(this IServiceCollection services)
