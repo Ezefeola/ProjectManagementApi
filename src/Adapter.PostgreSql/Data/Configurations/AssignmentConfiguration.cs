@@ -1,5 +1,6 @@
 ﻿using Core.Domain.Projects.Entities;
 using Core.Domain.Projects.ValueObjects;
+using Core.Domain.Users.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,6 +17,26 @@ public class AssignmentConfiguration : EntityTypeBaseConfiguration<Assignment>
                )
                .HasColumnName(Assignment.ColumnNames.Id)
                .ValueGeneratedNever();
+
+        builder.Property(x => x.ProjectId)
+              .HasConversion(
+                  projectId => projectId.Value,
+                  value => ProjectId.NewEfId(value)
+              )
+              .HasColumnName(Assignment.ColumnNames.ProjectId);
+        builder.HasOne(x => x.Project)
+               .WithMany(x => x.Assignments)
+               .HasForeignKey(x => x.ProjectId);
+
+        builder.Property(x => x.UserId)
+              .HasConversion(
+                  userId => userId!.Value,
+                  value => UserId.NewEfId(value)
+              )
+              .HasColumnName(Assignment.ColumnNames.UserId);
+        builder.HasOne(x => x.User)
+               .WithMany(x => x.Assignments)
+               .HasForeignKey(x => x.UserId);
     }
 
     protected override void ConfigurateProperties(EntityTypeBuilder<Assignment> builder)

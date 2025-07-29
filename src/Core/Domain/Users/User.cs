@@ -1,5 +1,7 @@
 ﻿using Core.Domain.Abstractions;
 using Core.Domain.Abstractions.ValueObjects;
+using Core.Domain.Projects.Entities;
+using Core.Domain.Projects.ValueObjects;
 using Core.Domain.Users.ValueObjects;
 
 namespace Core.Domain.Users;
@@ -40,6 +42,8 @@ public sealed class User : Entity<UserId>
     public EmailAddress EmailAddress { get; private set; } = default!;
     public string Password { get; private set; } = default!;
     public UserRole UserRole { get; private set; } = default!;
+    public List<ProjectUser> ProjectUsers { get; set; } = [];
+    public List<Assignment> Assignments { get; set; } = [];
 
     public static DomainResult<User> Create(
         string firstName,
@@ -50,25 +54,21 @@ public sealed class User : Entity<UserId>
         DateTime? createdAt = default!
     )
     {
+        List<string> errors = [];
+
         DomainResult<FullName> fullNameResult = FullName.Create(firstName, lastName);
-        if (!fullNameResult.IsSuccess)
-        {
-            return DomainResult<User>.Failure()
-                                     .WithErrors(fullNameResult.Errors);
-        }
+        if (!fullNameResult.IsSuccess) errors.AddRange(fullNameResult.Errors);
 
         DomainResult<EmailAddress> emailAddressResult = EmailAddress.Create(email);
-        if (!emailAddressResult.IsSuccess)
-        {
-            return DomainResult<User>.Failure()
-                                     .WithErrors(emailAddressResult.Errors);
-        }
+        if (!emailAddressResult.IsSuccess) errors.AddRange(emailAddressResult.Errors);
 
         DomainResult<UserRole> userRoleResult = UserRole.Create(userRole);
-        if (!userRoleResult.IsSuccess)
+        if (!userRoleResult.IsSuccess) errors.AddRange(userRoleResult.Errors);
+
+        if(errors.Count > 0)
         {
             return DomainResult<User>.Failure()
-                                     .WithErrors(userRoleResult.Errors);
+                                     .WithErrors(errors);
         }
 
         User user = new()

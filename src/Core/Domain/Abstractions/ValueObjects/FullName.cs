@@ -19,20 +19,18 @@ public sealed record FullName : ValueObject
 
     public static DomainResult<FullName> Create(string firstName, string lastName)
     {
-        if (string.IsNullOrWhiteSpace(firstName))
-        {
-            return DomainResult<FullName>.Failure()
-                                         .WithErrors([DomainErrors.UserErrors.FIRSTNAME_NOT_EMPTY]);
-        }
+        List<string> errors = [];
+        if (string.IsNullOrWhiteSpace(firstName)) errors.Add(DomainErrors.UserErrors.FIRST_NAME_NOT_EMPTY);
 
-        if (string.IsNullOrWhiteSpace(lastName))
+        if (string.IsNullOrWhiteSpace(lastName)) errors.Add(DomainErrors.UserErrors.LAST_NAME_NOT_EMPTY);
+
+        if(errors.Count > 0)
         {
             return DomainResult<FullName>.Failure()
-                                         .WithErrors([DomainErrors.UserErrors.LASTNAME_NOT_EMPTY]);
-        }
+                                         .WithErrors(errors);
+        }   
 
         FullName fullName = new(firstName, lastName);
-
         return DomainResult<FullName>.Success()
                                      .WithDescription("FullName created successfully.")
                                      .WithValue(fullName);

@@ -9,7 +9,7 @@ public class UserInfo : IUserInfo
         ClaimsPrincipal? userClaims = httpContextAccessor.HttpContext?.User;
         if (userClaims == null)
         {
-            throw new InvalidOperationException("User is not authenticated or missing.");
+            throw new InvalidOperationException("User is not authenticated or is missing.");
         }
 
         string? sub = userClaims.FindFirst(ClaimTypes.NameIdentifier)?.Value

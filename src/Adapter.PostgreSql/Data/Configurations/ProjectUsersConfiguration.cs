@@ -1,11 +1,11 @@
-﻿using Core.Domain.Collaborators.ValueObjects;
-using Core.Domain.Projects.Entities;
+﻿using Core.Domain.Projects.Entities;
 using Core.Domain.Projects.ValueObjects;
+using Core.Domain.Users.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Adapter.SqlServer.Data.Configurations;
-public class ProjectCollaboratorConfiguration : EntityTypeBaseConfiguration<ProjectUser>
+public class ProjectUsersConfiguration : EntityTypeBaseConfiguration<ProjectUser>
 {
     protected override void ConfigurateConstraints(EntityTypeBuilder<ProjectUser> builder)
     {
@@ -20,10 +20,10 @@ public class ProjectCollaboratorConfiguration : EntityTypeBaseConfiguration<Proj
                     .HasColumnName(ProjectUser.ColumnNames.ProjectId)
                     .ValueGeneratedNever();
 
-            idBuilder.Property(x => x.CollaboratorId)
+            idBuilder.Property(x => x.UserId)
                      .HasConversion(
                         collaboratorId => collaboratorId.Value,
-                        value => CollaboratorId.NewEfId(value)
+                        value => UserId.NewEfId(value)
                      )
                     .HasColumnName(ProjectUser.ColumnNames.CollaboratorId)
                     .ValueGeneratedNever();
@@ -36,7 +36,7 @@ public class ProjectCollaboratorConfiguration : EntityTypeBaseConfiguration<Proj
         //      )
         //      .HasColumnName(ProjectCollaborator.ColumnNames.ProjectId);
         builder.HasOne(x => x.Project)
-               .WithMany(x => x.ProjectCollaborators)
+               .WithMany(x => x.ProjectUsers)
                .HasForeignKey(x => x.Id.ProjectId);
 
         //builder.Property(x => x.Id.CollaboratorId)
@@ -45,9 +45,9 @@ public class ProjectCollaboratorConfiguration : EntityTypeBaseConfiguration<Proj
         //          value => CollaboratorId.NewEfId(value)
         //      )
         //      .HasColumnName(ProjectCollaborator.ColumnNames.CollaboratorId);
-        builder.HasOne(x => x.Collaborator)
-               .WithMany(x => x.ProjectCollaborators)
-               .HasForeignKey(x => x.Id.CollaboratorId);
+        builder.HasOne(x => x.User)
+               .WithMany(x => x.ProjectUsers)
+               .HasForeignKey(x => x.Id.UserId);
     }
 
     protected override void ConfigurateProperties(EntityTypeBuilder<ProjectUser> builder)

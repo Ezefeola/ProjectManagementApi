@@ -16,7 +16,7 @@ public sealed record UserRole : ValueObject
 
     public static DomainResult<UserRole> Create(UserRolesEnum userRoleValue)
     {
-        if (!Enum.IsDefined(typeof(UserRolesEnum), userRoleValue))
+        if (!Enum.IsDefined(userRoleValue))
         {
             return DomainResult<UserRole>.Failure()
                                          .WithErrors([$"Invalid user role: {userRoleValue}"]);

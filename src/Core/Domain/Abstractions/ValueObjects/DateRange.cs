@@ -17,10 +17,14 @@ public sealed record DateRange
         DateTime endDate
     )
     {
-        if (startDate >= endDate)
+        List<string> errors = [];
+
+        if (startDate >= endDate) errors.Add(DomainErrors.START_DATE_BEFORE_END_DATE);
+
+        if (errors.Count > 0)
         {
             return DomainResult<DateRange>.Failure()
-                                          .WithErrors([DomainErrors.START_DATE_BEFORE_END_DATE]);
+                                          .WithErrors(errors);
         }
 
         DateRange dateRange = new(startDate, endDate);
@@ -34,15 +38,17 @@ public sealed record DateRange
         DateTime updatedStartDate = newStartDate ?? StartDate;
         DateTime updatedEndDate = newEndDate ?? EndDate;
 
-        DomainResult<DateRange> createResult = Create(updatedStartDate, updatedEndDate);
-        if (!createResult.IsSuccess)
-            return createResult;
+        DomainResult<DateRange> createDateRangeResult = Create(updatedStartDate, updatedEndDate);
+        if (!createDateRangeResult.IsSuccess)
+        {
+            return createDateRangeResult;
+        }
 
         int updatedCount = 0;
         if (!StartDate.Equals(updatedStartDate)) updatedCount++;
         if (!EndDate.Equals(updatedEndDate)) updatedCount++;
 
-        return createResult.WithUpdatedFieldCount(updatedCount);
+        return createDateRangeResult.WithUpdatedFieldCount(updatedCount);
 
     }
 }
