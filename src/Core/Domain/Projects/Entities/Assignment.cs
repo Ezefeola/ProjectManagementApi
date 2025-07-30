@@ -39,11 +39,12 @@ public sealed class Assignment : Entity<AssignmentId>
     public User? User { get; private set; }
 
     internal static DomainResult<Assignment> Create(
+        ProjectId projectId,
         string title,
         decimal? estimatedHours,
         AssignmentStatus.AssignmentStatusEnum status,
         string? description,
-        Guid? userId
+        UserId? userId
     )
     {
         List<string> errors = [];
@@ -52,15 +53,6 @@ public sealed class Assignment : Entity<AssignmentId>
 
         DomainResult<AssignmentStatus> assignmentStatusResult = AssignmentStatus.Create(status);
         if(!assignmentStatusResult.IsSuccess) errors.AddRange(assignmentStatusResult.Errors);
-
-        UserId? finalUserId = null;
-        if (userId is not null)
-        {
-            DomainResult<UserId> userIdResult = UserId.Create(userId.Value);
-            if(!userIdResult.IsSuccess) errors.AddRange(userIdResult.Errors);
-
-            finalUserId = userIdResult.Value;
-        }
 
         if (errors.Count > 0)
         {
@@ -71,12 +63,12 @@ public sealed class Assignment : Entity<AssignmentId>
         Assignment assignment = new()
         {
             Id = AssignmentId.NewId(),
+            ProjectId = projectId,
             Title = title,
             Description = description,
             EstimatedHours = estimatedHours,
-            LoggedHours = loggedHours,
             Status = assignmentStatusResult.Value,
-            UserId = finalUserId
+            UserId = userId
         };
         return DomainResult<Assignment>.Success()
                                        .WithValue(assignment);

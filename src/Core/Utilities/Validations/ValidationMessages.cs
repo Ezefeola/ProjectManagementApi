@@ -10,8 +10,6 @@ public static class ValidationMessages
     public static class Auth
     {
         public static string INVALID_CREDENTIALS = "Invalid credentials.";
-        public static string USER_NOT_FOUND = "User not found.";
-        public static string USER_ALREADY_EXISTS = "User already exists.";
         public static string INVALID_TOKEN = "Invalid token.";
         public static string TOKEN_EXPIRED = "Token has expired.";
     }

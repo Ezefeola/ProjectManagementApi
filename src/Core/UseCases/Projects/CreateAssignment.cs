@@ -3,17 +3,18 @@ using Core.Contracts.DTOs.Projects.Response;
 using Core.Contracts.Models;
 using Core.Contracts.Result;
 using Core.Contracts.UnitOfWork;
+using Core.Contracts.UseCases.Projects;
 using Core.Domain.Abstractions;
 using Core.Domain.Projects;
-using Core.Domain.Projects.Entities;
 using Core.Domain.Projects.ValueObjects;
+using Core.Domain.Users.ValueObjects;
 using Core.Utilities.Mappers;
 using FluentValidation;
 using FluentValidation.Results;
 using System.Net;
 
 namespace Core.UseCases.Projects;
-public class CreateAssignment
+public class CreateAssignment : ICreateAssignment
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<CreateAssignmentRequestDto> _validator;
@@ -32,15 +33,15 @@ public class CreateAssignment
         CancellationToken cancellationToken
     )
     {
-        ValidationResult validatorResult = await _validator.ValidateAsync(requestDto, cancellationToken);
-        if(!validatorResult.IsValid)
+        ValidationResult validatorResult = _validator.Validate(requestDto);
+        if (!validatorResult.IsValid)
         {
             return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.BadRequest)
-                                                      .WithErrors([..validatorResult.Errors.Select(e => e.ErrorMessage)]);
+                                                      .WithErrors([.. validatorResult.Errors.Select(e => e.ErrorMessage)]);
         }
 
         DomainResult<ProjectId> projectIdResult = ProjectId.Create(requestDto.ProjectId);
-        if(!projectIdResult.IsSuccess)
+        if (!projectIdResult.IsSuccess)
         {
             return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.BadRequest)
                                                       .WithErrors(projectIdResult.Errors);
@@ -50,10 +51,29 @@ public class CreateAssignment
             projectIdResult.Value,
             cancellationToken
         );
-        if(project is null)
+        if (project is null)
         {
             return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.NotFound)
                                                       .WithErrors([DomainErrors.ProjectErrors.PROJECT_NOT_FOUND]);
+        }
+
+        UserId? userId = null;
+        if (requestDto.UserId.HasValue)
+        {
+            DomainResult<UserId> userIdResult = UserId.Create(requestDto.UserId.Value);
+            if (!userIdResult.IsSuccess)
+            {
+                return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.BadRequest)
+                                                          .WithErrors(userIdResult.Errors);
+            }
+            bool userExists = await _unitOfWork.UserRepository.ExistsByIdAsync(userIdResult.Value, cancellationToken);
+            if (!userExists)
+            {
+                return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.NotFound)
+                                                          .WithErrors([DomainErrors.UserErrors.USER_NOT_FOUND]);
+            }
+
+            userId = userIdResult.Value;
         }
 
         DomainResult<Project> addAssignmentResult = project.AddAssignment(
@@ -61,16 +81,16 @@ public class CreateAssignment
             requestDto.EstimatedHours,
             requestDto.Status,
             requestDto.Description,
-            requestDto.UserId
+            userId
         );
-        if(!addAssignmentResult.IsSuccess)
+        if (!addAssignmentResult.IsSuccess)
         {
             return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.BadRequest)
                                                       .WithErrors(addAssignmentResult.Errors);
         }
 
         SaveResult saveResult = await _unitOfWork.CompleteAsync(cancellationToken);
-        if(!saveResult.IsSuccess)
+        if (!saveResult.IsSuccess)
         {
             return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.InternalServerError)
                                                       .WithErrors([saveResult.ErrorMessage]);

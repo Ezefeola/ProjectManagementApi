@@ -1,4 +1,5 @@
 ﻿using Core.Domain.Projects;
+using Core.Domain.Projects.Entities;
 using Core.Domain.Users;
 
 namespace Core.Domain.Abstractions;
@@ -15,12 +16,17 @@ public static class DomainErrors
 
         public static readonly string PASSWORD_NOT_EMPTY = "Password cannot be empty.";
         public static readonly string PASSWORD_TOO_LONG = $"Password can not exceed {User.Rules.PASSWORD_MAX_LENGTH}.";
+
+        public static readonly string USER_NOT_FOUND = $"User not found.";
+        public static readonly string USER_ALREADY_EXISTS = "User already exists.";
     }
 
     public static class AssignmentErrors
     {
         public static readonly string INVALID_ASSIGNMENT_STATUS = "Invalid assignment status value.";
         public static readonly string TITLE_NOT_EMPTY = "The Title field cannot be empty.";
+        public static readonly string TITLE_TOO_LONG = $"The Title field cannot exceed {Assignment.Rules.TITLE_MAX_LENGTH}.";
+        public static readonly string DESCRIPTION_TOO_LONG = $"The Description field cannot exceed {Assignment.Rules.TITLE_MAX_LENGTH}.";
     }
 
     public static class ProjectErrors

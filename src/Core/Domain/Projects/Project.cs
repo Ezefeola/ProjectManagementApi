@@ -3,6 +3,7 @@ using Core.Domain.Abstractions.ValueObjects;
 using Core.Domain.Projects.Entities;
 using Core.Domain.Projects.ValueObjects;
 using Core.Domain.Users;
+using Core.Domain.Users.ValueObjects;
 
 namespace Core.Domain.Projects;
 public sealed class Project : AggregateRoot<ProjectId>
@@ -70,7 +71,7 @@ public sealed class Project : AggregateRoot<ProjectId>
         decimal? estimatedHours,
         AssignmentStatus.AssignmentStatusEnum status,
         string? description,
-        Guid? userId
+        UserId? userId
     )
     {
         List<string> errors = [];   
@@ -82,6 +83,7 @@ public sealed class Project : AggregateRoot<ProjectId>
         }
 
         DomainResult<Assignment> assignmentResult = Assignment.Create(
+            Id,
             title,
             estimatedHours,
             status,
@@ -95,6 +97,8 @@ public sealed class Project : AggregateRoot<ProjectId>
             return DomainResult<Project>.Failure()
                                         .WithErrors(errors);
         }
+
+        Assignments.Add(assignmentResult.Value);
 
         return DomainResult<Project>.Success()
                                     .WithValue(this);
