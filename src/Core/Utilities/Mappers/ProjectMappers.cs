@@ -1,5 +1,7 @@
-﻿using Core.Contracts.DTOs.Projects.Response;
+﻿using Core.Contracts.DTOs.Projects.Request;
+using Core.Contracts.DTOs.Projects.Response;
 using Core.Domain.Projects;
+using Core.Utilities.QueryOptions.Pagination;
 
 namespace Core.Utilities.Mappers;
 public static class ProjectMappers
@@ -30,6 +32,22 @@ public static class ProjectMappers
         return new CreateAssignmentResponseDto()
         {
             ProjectResponseDto = project.ToProjectResponseDto()
+        };
+    }
+
+    public static GetProjectsResponseDto ToGetProjectsResponseDto(
+        this IEnumerable<Project> projects, 
+        GetProjectsRequestDto parametersRequestDto,
+        int projectsCount
+    )
+    {
+        return new GetProjectsResponseDto
+        {
+            PageIndex = parametersRequestDto.GetPageIndex(),
+            PageSize = parametersRequestDto.GetPageSize(),
+            TotalPages = parametersRequestDto.GetTotalPages(projectsCount),
+            TotalRecords = projectsCount,
+            Items = [.. projects.Select(x => x.ToProjectResponseDto())]
         };
     }
 }

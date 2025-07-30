@@ -51,8 +51,13 @@ public class Login : ILogin
                                            .WithErrors([ValidationMessages.Auth.INVALID_CREDENTIALS]);
         }
 
-        PasswordVerificationResult passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.Password, requestDto.Password);
-        if (passwordVerificationResult != PasswordVerificationResult.Success)
+        //PasswordVerificationResult passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.Password, requestDto.Password);
+        //if (passwordVerificationResult != PasswordVerificationResult.Success)
+        //{
+        //    return Result<LoginResponseDto>.Failure(HttpStatusCode.BadRequest)
+        //                                   .WithErrors([ValidationMessages.Auth.INVALID_CREDENTIALS]);
+        //}
+        if(user.Password != requestDto.Password)
         {
             return Result<LoginResponseDto>.Failure(HttpStatusCode.BadRequest)
                                            .WithErrors([ValidationMessages.Auth.INVALID_CREDENTIALS]);

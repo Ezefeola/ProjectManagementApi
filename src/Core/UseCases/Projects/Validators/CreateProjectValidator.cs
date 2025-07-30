@@ -14,5 +14,17 @@ public class CreateProjectValidator : AbstractValidator<CreateProjectRequestDto>
                 .WithMessage(DomainErrors.ProjectErrors.NAME_NOT_EMPTY)
             .MaximumLength(Project.Rules.NAME_MAX_LENGTH)
                 .WithMessage(ValidationMessages.MAX_LENGTH);
+
+        RuleFor(x => x.StartDate)
+           .GreaterThan(x => x.EndDate)
+               .WithMessage(DomainErrors.ProjectErrors.START_DATE_BEFORE_END_DATE);
+
+        RuleFor(x => x.EndDate)
+           .LessThan(x => x.StartDate)
+               .WithMessage(DomainErrors.ProjectErrors.START_DATE_BEFORE_END_DATE);
+
+        RuleFor(x => x.Status)
+           .IsInEnum()
+              .WithMessage(DomainErrors.ProjectErrors.INVALID_STATUS);
     }
 }

@@ -21,6 +21,10 @@ public class CreateAssignmentValidator : AbstractValidator<CreateAssignmentReque
 
         RuleFor(x => x.Description)
             .MaximumLength(Assignment.Rules.DESCRIPTION_MAX_LENGTH)
-                .WithMessage(DomainErrors.AssignmentErrors.DESCRIPTION_TOO_LONG);   
+                .WithMessage(DomainErrors.AssignmentErrors.DESCRIPTION_TOO_LONG);
+
+        RuleFor(x => x.Status)
+            .IsInEnum()
+                .WithMessage(DomainErrors.AssignmentErrors.INVALID_ASSIGNMENT_STATUS);
     }
 }
