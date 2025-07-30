@@ -12,7 +12,7 @@ public class UserConfiguration : EntityTypeBaseConfiguration<User>
         builder.Property(x => x.Id)
                .HasConversion(
                   id => id.Value,
-                  value => UserId.NewEfId(value)
+                  value => UserId.Create(value)
                )
                .HasColumnName(User.ColumnNames.Id)
                .ValueGeneratedNever();
@@ -24,12 +24,12 @@ public class UserConfiguration : EntityTypeBaseConfiguration<User>
         {
             fullNameBuilder.Property(x => x.FirstName)
                            .IsRequired()
-                           .HasMaxLength(User.Rules.FIRSTNAME_MAX_LENGTH)
+                           .HasMaxLength(User.Rules.FIRST_NAME_MAX_LENGTH)
                            .HasColumnName(User.ColumnNames.FirstName);
 
             fullNameBuilder.Property(x => x.LastName)
                            .IsRequired()
-                           .HasMaxLength(User.Rules.LASTNAME_MAX_LENGTH)
+                           .HasMaxLength(User.Rules.LAST_NAME_MAX_LENGTH)
                            .HasColumnName(User.ColumnNames.LastName);
         });
 

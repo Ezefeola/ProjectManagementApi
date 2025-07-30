@@ -12,7 +12,7 @@ public class ProjectConfiguration : EntityTypeBaseConfiguration<Project>
         builder.Property(x => x.Id)
                .HasConversion(
                    id => id.Value,
-                   value => ProjectId.NewEfId(value)
+                   value => ProjectId.Create(value)
                )
                .HasColumnName(Project.ColumnNames.Id)
                .ValueGeneratedNever();

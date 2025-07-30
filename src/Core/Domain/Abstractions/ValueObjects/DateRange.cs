@@ -19,7 +19,7 @@ public sealed record DateRange
     {
         List<string> errors = [];
 
-        if (startDate >= endDate) errors.Add(DomainErrors.START_DATE_BEFORE_END_DATE);
+        if (startDate >= endDate) errors.Add(DomainErrors.START_DATE_GREATER_THAN_END_DATE);
 
         if (errors.Count > 0)
         {

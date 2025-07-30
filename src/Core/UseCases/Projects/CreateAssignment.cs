@@ -40,15 +40,10 @@ public class CreateAssignment : ICreateAssignment
                                                       .WithErrors([.. validatorResult.Errors.Select(e => e.ErrorMessage)]);
         }
 
-        DomainResult<ProjectId> projectIdResult = ProjectId.Create(requestDto.ProjectId);
-        if (!projectIdResult.IsSuccess)
-        {
-            return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.BadRequest)
-                                                      .WithErrors(projectIdResult.Errors);
-        }
+        ProjectId projectId = ProjectId.Create(requestDto.ProjectId);
 
         Project? project = await _unitOfWork.ProjectRepository.GetByIdAsync(
-            projectIdResult.Value,
+            projectId,
             cancellationToken
         );
         if (project is null)
@@ -60,20 +55,14 @@ public class CreateAssignment : ICreateAssignment
         UserId? userId = null;
         if (requestDto.UserId.HasValue)
         {
-            DomainResult<UserId> userIdResult = UserId.Create(requestDto.UserId.Value);
-            if (!userIdResult.IsSuccess)
-            {
-                return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.BadRequest)
-                                                          .WithErrors(userIdResult.Errors);
-            }
-            bool userExists = await _unitOfWork.UserRepository.ExistsByIdAsync(userIdResult.Value, cancellationToken);
+            userId = UserId.Create(requestDto.UserId.Value);
+            
+            bool userExists = await _unitOfWork.UserRepository.ExistsByIdAsync(userId, cancellationToken);
             if (!userExists)
             {
                 return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.NotFound)
                                                           .WithErrors([DomainErrors.UserErrors.USER_NOT_FOUND]);
             }
-
-            userId = userIdResult.Value;
         }
 
         DomainResult<Project> addAssignmentResult = project.AddAssignment(

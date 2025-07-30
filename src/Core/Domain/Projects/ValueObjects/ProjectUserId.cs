@@ -16,25 +16,11 @@ public sealed record ProjectUserId : ValueObject
     public UserId UserId { get; private set; } = default!;
 
     public static ProjectUserId NewId(ProjectId projectId, UserId userId) => new(projectId, userId);
-    public static ProjectUserId NewEfId(ProjectId projectId, UserId userId) => new(projectId, userId);
-    public static DomainResult<ProjectUserId> Create(Guid projectId, Guid userId)
+    //public static ProjectUserId NewEfId(ProjectId projectId, UserId userId) => new(projectId, userId);
+    public static ProjectUserId Create(ProjectId projectId, UserId userId)
     {
-        List<string> errors = [];
 
-        DomainResult<ProjectId> projectIdResult = ProjectId.Create(projectId);
-        if (!projectIdResult.IsSuccess) errors.AddRange(projectIdResult.Errors);
-
-        DomainResult<UserId> userIdResult = UserId.Create(userId);
-        if (!userIdResult.IsSuccess) errors.AddRange(userIdResult.Errors);
-
-        if (errors.Count > 0)
-        {
-            return DomainResult<ProjectUserId>.Failure()
-                                                      .WithErrors(errors);
-        }
-
-        ProjectUserId projectCollaboratorId = new(projectIdResult.Value, userIdResult.Value);
-        return DomainResult<ProjectUserId>.Success()
-                                                  .WithValue(projectCollaboratorId);
+        ProjectUserId projectUserId = new(projectId, userId);
+        return projectUserId;
     }
 }

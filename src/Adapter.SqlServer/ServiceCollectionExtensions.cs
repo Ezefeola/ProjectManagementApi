@@ -9,7 +9,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 namespace Adapter.SqlServer;
 public static class ServiceCollectionExtensions
 {
-    public static void AddAdapterPostgreSql(this IServiceCollection services, string connectionString)
+    public static void AddAdapterSqlServer(this IServiceCollection services, string connectionString)
     {
         services.ConfigureDbContext(connectionString);
         services.ConfigureHealthChecks();

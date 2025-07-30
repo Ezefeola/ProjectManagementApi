@@ -15,7 +15,7 @@ public class ProjectUsersConfiguration : EntityTypeBaseConfiguration<ProjectUser
             idBuilder.Property(x => x.ProjectId)
                      .HasConversion(
                         projectId => projectId.Value,
-                        value => ProjectId.NewEfId(value)
+                        value => ProjectId.Create(value)
                      )
                     .HasColumnName(ProjectUser.ColumnNames.ProjectId)
                     .ValueGeneratedNever();
@@ -23,7 +23,7 @@ public class ProjectUsersConfiguration : EntityTypeBaseConfiguration<ProjectUser
             idBuilder.Property(x => x.UserId)
                      .HasConversion(
                         collaboratorId => collaboratorId.Value,
-                        value => UserId.NewEfId(value)
+                        value => UserId.Create(value)
                      )
                     .HasColumnName(ProjectUser.ColumnNames.CollaboratorId)
                     .ValueGeneratedNever();

@@ -14,7 +14,7 @@ public class TokenService(IConfiguration _configuration) : ITokenService
         {
             throw new Exception("The user Id is not valid.");
         }
-        if (user.Role is null)
+        if (user.UserRole is null)
         {
             throw new Exception("The user Role is not valid.");
         }
@@ -32,7 +32,7 @@ public class TokenService(IConfiguration _configuration) : ITokenService
             new Claim(JwtRegisteredClaimNames.Email, user.EmailAddress.Value),
         new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim(ClaimTypes.Role, user.Role.Name)
+        new Claim(ClaimTypes.Role, user.UserRole.Value.ToString())
         ];
 
         JwtSecurityToken? token = new(

@@ -13,27 +13,27 @@ public class AssignmentConfiguration : EntityTypeBaseConfiguration<Assignment>
         builder.Property(x => x.Id)
                .HasConversion(
                    id => id.Value,
-                   value => AssignmentId.NewEfId(value)
+                   value => AssignmentId.Create(value)
                )
                .HasColumnName(Assignment.ColumnNames.Id)
                .ValueGeneratedNever();
 
-        builder.Property(x => x.ProjectId)
-              .HasConversion(
-                  projectId => projectId.Value,
-                  value => ProjectId.NewEfId(value)
-              )
-              .HasColumnName(Assignment.ColumnNames.ProjectId);
+        //builder.Property(x => x.ProjectId)
+        //      .HasConversion(
+        //          projectId => projectId.Value,
+        //          value => ProjectId.NewEfId(value)
+        //      )
+        //      .HasColumnName(Assignment.ColumnNames.ProjectId);
         builder.HasOne(x => x.Project)
                .WithMany(x => x.Assignments)
                .HasForeignKey(x => x.ProjectId);
 
-        builder.Property(x => x.UserId)
-              .HasConversion(
-                  userId => userId!.Value,
-                  value => UserId.NewEfId(value)
-              )
-              .HasColumnName(Assignment.ColumnNames.UserId);
+        //builder.Property(x => x.UserId)
+        //      .HasConversion(
+        //          userId => userId!.Value,
+        //          value => UserId.NewEfId(value)
+        //      )
+              //.HasColumnName(Assignment.ColumnNames.UserId);
         builder.HasOne(x => x.User)
                .WithMany(x => x.Assignments)
                .HasForeignKey(x => x.UserId);

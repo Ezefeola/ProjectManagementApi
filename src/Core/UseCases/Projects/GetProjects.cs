@@ -2,13 +2,14 @@
 using Core.Contracts.DTOs.Projects.Response;
 using Core.Contracts.Result;
 using Core.Contracts.UnitOfWork;
+using Core.Contracts.UseCases.Projects;
 using Core.Domain.Abstractions;
 using Core.Domain.Projects;
 using Core.Utilities.Mappers;
 using System.Net;
 
 namespace Core.UseCases.Projects;
-public class GetProjects
+public class GetProjects : IGetProjects
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -20,7 +21,7 @@ public class GetProjects
     public async Task<Result<GetProjectsResponseDto>> ExecuteAsync(GetProjectsRequestDto parametersRequestDto, CancellationToken cancellationToken)
     {
         IEnumerable<Project> projects = await _unitOfWork.ProjectRepository.GetAllAsync(parametersRequestDto, cancellationToken);
-        if(!projects.Any())
+        if (!projects.Any())
         {
             return Result<GetProjectsResponseDto>.Failure(HttpStatusCode.NotFound)
                                                  .WithErrors([DomainErrors.ProjectErrors.PROJECT_NOT_FOUND]);

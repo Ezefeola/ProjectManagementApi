@@ -22,20 +22,30 @@ public abstract record StronglyTypedGuidId<TId> : StronglyTypedId<Guid>
         };
     }
 
-    public static DomainResult<TId> Create(Guid value)
+    //public static DomainResult<TId> Create(Guid value)
+    //{
+    //    if (value == Guid.Empty)
+    //    {
+    //        return DomainResult<TId>.Failure()
+    //                                .WithErrors(["Invalid ID"]);
+    //    }
+
+    //    TId id = new()
+    //    {
+    //        Value = value
+    //    };
+
+    //    return DomainResult<TId>.Success()
+    //                            .WithValue(id);
+    //}
+    public static TId Create(Guid value)
     {
-        if (value == Guid.Empty)
-        {
-            return DomainResult<TId>.Failure()
-                                    .WithErrors(["Invalid ID"]);
-        }
 
         TId id = new()
         {
             Value = value
         };
 
-        return DomainResult<TId>.Success()
-                                .WithValue(id);
+        return id;
     }
 }

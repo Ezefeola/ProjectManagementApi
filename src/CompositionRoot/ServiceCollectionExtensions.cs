@@ -12,6 +12,6 @@ public static class ServiceCollectionExtensions
             ?? throw new KeyNotFoundException("Error: Connection string not found.");
 
         services.AddCore(configuration);
-        services.AddAdapterPostgreSql(connectionString);
+        services.AddAdapterSqlServer(connectionString);
     }
 }
