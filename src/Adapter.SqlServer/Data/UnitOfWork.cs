@@ -10,21 +10,21 @@ public class UnitOfWork : IUnitOfWork
     public IUserRepository UserRepository { get; }
     public IProjectRepository ProjectRepository { get; }
     public IAssignmentRepository AssignmentRepository { get; }
-    public IProjectCollaboratorRepository ProjectCollaboratorRepository { get; }
+    public IProjectUserRepository ProjectUserRepository { get; }
 
     public UnitOfWork(
         ApplicationDbContext context,
         IUserRepository userRepository,
         IProjectRepository projectRepository,
         IAssignmentRepository assignmentRepository,
-        IProjectCollaboratorRepository projectCollaboratorRepository
+        IProjectUserRepository projectUserRepository
     )
     {
         _dbContext = context;
         UserRepository = userRepository;
         ProjectRepository = projectRepository;
         AssignmentRepository = assignmentRepository;
-        ProjectCollaboratorRepository = projectCollaboratorRepository;
+        ProjectUserRepository = projectUserRepository;
     }
 
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)

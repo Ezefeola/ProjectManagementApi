@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Adapter.PostgreSql\Adapter.SqlServer.csproj" />
     <ProjectReference Include="..\Adapter.SqlServer\Adapter.SqlServer.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>

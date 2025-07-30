@@ -35,7 +35,7 @@ public class ProjectConfiguration : EntityTypeBaseConfiguration<Project>
                         .HasColumnType("datetime");
 
             periodBuilder.Property(x => x.EndDate)
-                         .IsRequired(false)
+                         .IsRequired()
                          .HasColumnName(Project.ColumnNames.EndDate)
                          .HasColumnType("datetime");
         });
@@ -49,6 +49,6 @@ public class ProjectConfiguration : EntityTypeBaseConfiguration<Project>
                          .HasColumnName(Project.ColumnNames.Status);
         });
 
-        BaseEntityConfig.ApplyTo<Project, ProjectId>(builder);
+        BaseEntityConfig.ApplyTo<Project>(builder);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Core.Domain.Users;
+﻿using Core.Domain.Abstractions.ValueObjects;
+using Core.Domain.Users;
 using Core.Domain.Users.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -33,21 +34,27 @@ public class UserConfiguration : EntityTypeBaseConfiguration<User>
                            .HasColumnName(User.ColumnNames.LastName);
         });
 
-        builder.ComplexProperty(x => x.EmailAddress, emailBuilder =>
-        {
-            emailBuilder.Property(x => x.Value)
-                        .IsRequired()
-                        .HasMaxLength(User.Rules.EMAIL_MAX_LENGTH)
-                        .HasColumnName(User.ColumnNames.Email);
-        });
-        builder.Property<string>(User.ColumnNames.Email)
+        builder.Property(x => x.EmailAddress)
+               .IsRequired()
+               .HasConversion(
+                    x => x.Value,
+                    value => EmailAddress.Create(value).Value
+               )
                .HasColumnName(User.ColumnNames.Email);
-        builder.HasIndex(User.ColumnNames.Email)
-               .IsUnique();
+        builder.HasIndex(x => x.EmailAddress)
+                   .IsUnique();
+
+        builder.Property(x => x.UserRole)
+               .IsRequired()
+               .HasConversion(
+                    x => x.Value,
+                    value => UserRole.Create(value).Value
+               )
+               .HasColumnName(User.ColumnNames.UserRole);
 
         builder.Property(x => x.Password)
                .HasColumnName(User.ColumnNames.Password);    
 
-        BaseEntityConfig.ApplyTo<User, UserId>(builder);
+        BaseEntityConfig.ApplyTo<User>(builder);
     }
 }

@@ -40,7 +40,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IProjectRepository, ProjectRepository>()
-                .AddScoped<IProjectCollaboratorRepository, ProjectCollaboratorRepository>()
+                .AddScoped<IProjectUserRepository, ProjectUserRepository>()
                 .AddScoped<IAssignmentRepository, AssignmentRepository>();
     }
 }

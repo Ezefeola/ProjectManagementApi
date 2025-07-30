@@ -1,7 +1,14 @@
 ﻿using Core.Contracts.Models;
 
 namespace Core.Domain.Abstractions;
-public abstract class Entity<TId> : IEquatable<Entity<TId>>, IEntity<TId>
+public abstract class Entity : IEntity
+{
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; set; }
+    public bool IsDeleted { get; set; }
+    public DateTime? DeletedAt { get; set; }
+}
+public abstract class Entity<TId> : Entity, IEquatable<Entity<TId>>, IEntity<TId>
     where TId : notnull
 {
     public TId Id { get; protected set; } = default!;
@@ -33,9 +40,4 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>, IEntity<TId>
     {
         return Id.GetHashCode();
     }
-
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAt { get; set; }
-    public bool IsDeleted { get; set; }
-    public DateTime? DeletedAt { get; set; }
 }

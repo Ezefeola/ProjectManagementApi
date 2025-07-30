@@ -63,6 +63,7 @@ public class AssignmentConfiguration : EntityTypeBaseConfiguration<Assignment>
                 .HasConversion<string>()
                 .HasColumnName(Assignment.ColumnNames.Status);
         });
-               
+
+        BaseEntityConfig.ApplyTo<Assignment>(builder);
     }
 }

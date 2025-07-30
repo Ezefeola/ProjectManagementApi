@@ -16,9 +16,7 @@ public abstract class EntityTypeBaseConfiguration<T> : IEntityTypeConfiguration<
 
 public static class BaseEntityConfig
 {
-    public static void ApplyTo<T, TId>(EntityTypeBuilder<T> builder)
-        where T : Entity<TId>
-        where TId : notnull
+    public static void ApplyTo<T>(EntityTypeBuilder<T> builder) where T : Entity
     {
         builder.Property(e => e.CreatedAt)
                .HasColumnType("datetime")
