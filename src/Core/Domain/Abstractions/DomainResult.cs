@@ -1,4 +1,5 @@
-﻿public sealed class DomainResult<TValue>
+﻿namespace Core.Domain.Abstractions;
+public sealed class DomainResult<TValue>
 {
 
     public bool IsSuccess { get; private set; }
@@ -6,27 +7,23 @@
     public List<string> Errors { get; private set; } = [];
 
     private TValue? _value;
-    public TValue Value => IsSuccess && _value is not null
-       ? _value
-       : throw new InvalidOperationException("Cannot access Value when result is failure or value is null.");
+    public TValue Value => IsSuccess && _value is not null ? _value : EmptyValue();
 
     public int UpdatedFieldCount { get; private set; }
 
-    private DomainResult(bool isSuccess, TValue? value = default)
+    private DomainResult(bool isSuccess)
     {
         IsSuccess = isSuccess;
-        _value = value;
+    }
+
+    private TValue EmptyValue()
+    {
+        return _value = default!;
     }
 
     public DomainResult<TValue> WithDescription(string description)
     {
         Description = description;
-        return this;
-    }
-
-    public DomainResult<TValue> WithErrors(List<string> errors)
-    {
-        Errors = errors.ToList();
         return this;
     }
 
@@ -36,26 +33,28 @@
         return this;
     }
 
-
-    public DomainResult<TValue> WithValue(TValue value)
+    public static DomainResult<TValue> Success(TValue value)
     {
-        _value = value;
-        return this;
+        DomainResult<TValue> domainResult = new(true)
+        {
+            _value = value
+        };
+        return domainResult;
     }
 
-    public static DomainResult<TValue> Success()
+    public static DomainResult<TValue> Failure(List<string> errors)
     {
-        return new DomainResult<TValue>(true);
-    }
+        DomainResult<TValue> domainResult = new(false)
+        {
+            Errors = errors
+        };
 
-    public static DomainResult<TValue> Failure()
-    {
-        return new DomainResult<TValue>(false);
+        return domainResult;
     }
 }
 
 public static class DomainResult
 {
-    public static DomainResult<T> Success<T>() => DomainResult<T>.Success();
-    public static DomainResult<T> Failure<T>() => DomainResult<T>.Failure();
+    public static DomainResult<T> Success<T>(T value) => DomainResult<T>.Success(value);
+    public static DomainResult<T> Failure<T>(List<string> errors) => DomainResult<T>.Failure(errors);
 }

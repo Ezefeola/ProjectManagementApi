@@ -52,7 +52,7 @@ public sealed class Project : AggregateRoot<ProjectId>
         if (errors.Count > 0)
         {
             return DomainResult<Project>.Failure()
-                                        .WithErrors(errors);
+                                        .WithErrors(["error creating instance"]);
         }
 
         Project project = new()
@@ -62,8 +62,7 @@ public sealed class Project : AggregateRoot<ProjectId>
             ProjectPeriod = dateRangeResult.Value,
             Status = projectStatusResult.Value
         };
-        return DomainResult<Project>.Success()
-                                    .WithValue(project);
+        return DomainResult<Project>.Success(project);
     }
 
     public DomainResult<Project> AddAssignment(
