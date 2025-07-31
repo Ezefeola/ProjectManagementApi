@@ -16,8 +16,6 @@ public class ProjectConfiguration : EntityTypeBaseConfiguration<Project>
                )
                .HasColumnName(Project.ColumnNames.Id)
                .ValueGeneratedNever();
-
-
     }
 
     protected override void ConfigurateProperties(EntityTypeBuilder<Project> builder)

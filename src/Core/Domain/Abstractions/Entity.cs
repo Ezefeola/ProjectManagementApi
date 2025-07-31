@@ -7,6 +7,25 @@ public abstract class Entity : IEntity
     public DateTime? UpdatedAt { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
+
+    public void MakAsUpdated()
+    {
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void SoftDelete()
+    {
+        IsDeleted = true;
+        DeletedAt = DateTime.UtcNow;
+        MakAsUpdated();
+    }
+
+    public void Restore()
+    {
+        IsDeleted = false;
+        DeletedAt = null;
+        MakAsUpdated();
+    }
 }
 public abstract class Entity<TId> : Entity, IEquatable<Entity<TId>>, IEntity<TId>
     where TId : notnull
