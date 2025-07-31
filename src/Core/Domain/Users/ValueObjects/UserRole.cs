@@ -1,4 +1,5 @@
 ﻿using Core.Contracts.Models;
+using Core.Domain.Abstractions;
 
 namespace Core.Domain.Users.ValueObjects;
 public sealed record UserRole : ValueObject
@@ -18,36 +19,31 @@ public sealed record UserRole : ValueObject
     {
         if (!Enum.IsDefined(userRoleValue))
         {
-            return DomainResult<UserRole>.Failure()
-                                         .WithErrors([$"Invalid user role: {userRoleValue}"]);
+            return DomainResult<UserRole>.Failure([$"Invalid user role: {userRoleValue}"]);
         }
         
         UserRole userRole = new()
         {
             Value = userRoleValue
         };
-        return DomainResult<UserRole>.Success()
-                                     .WithValue(userRole);
+        return DomainResult<UserRole>.Success(userRole);
     }
 
     public DomainResult<UserRole> UpdateIfChanged(UserRolesEnum? userRole)
     {
         if(userRole is null)
         {
-            return DomainResult<UserRole>.Success()
-                                         .WithValue(this);
+            return DomainResult<UserRole>.Success(this);
         }
 
         if (Value == userRole.Value)
         {
-            return DomainResult<UserRole>.Success()
-                                         .WithValue(this)
+            return DomainResult<UserRole>.Success(this)
                                          .WithUpdatedFieldCount(0);
         }
 
         Value = userRole.Value;
 
-        return DomainResult<UserRole>.Success()
-                                     .WithValue(this);
+        return DomainResult<UserRole>.Success(this);
     }
 }

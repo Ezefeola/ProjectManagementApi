@@ -51,8 +51,7 @@ public sealed class Project : AggregateRoot<ProjectId>
 
         if (errors.Count > 0)
         {
-            return DomainResult<Project>.Failure()
-                                        .WithErrors(["error creating instance"]);
+            return DomainResult<Project>.Failure(errors);
         }
 
         Project project = new()
@@ -77,8 +76,7 @@ public sealed class Project : AggregateRoot<ProjectId>
 
         if (Status.IsCompleted())
         {
-            return DomainResult<Project>.Failure()
-                                        .WithErrors([DomainErrors.ProjectErrors.INVALID_ASSIGNMENT_PROJECT_COMPLETED]);
+            return DomainResult<Project>.Failure([DomainErrors.ProjectErrors.INVALID_ASSIGNMENT_PROJECT_COMPLETED]);
         }
 
         DomainResult<Assignment> assignmentResult = Assignment.Create(
@@ -93,13 +91,11 @@ public sealed class Project : AggregateRoot<ProjectId>
         
         if (errors.Count > 0)
         {
-            return DomainResult<Project>.Failure()
-                                        .WithErrors(errors);
+            return DomainResult<Project>.Failure(errors);
         }
 
         Assignments.Add(assignmentResult.Value);
 
-        return DomainResult<Project>.Success()
-                                    .WithValue(this);
+        return DomainResult<Project>.Success(this);
     }
 }

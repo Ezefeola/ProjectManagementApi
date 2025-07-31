@@ -56,8 +56,7 @@ public sealed class Assignment : Entity<AssignmentId>
 
         if (errors.Count > 0)
         {
-            return DomainResult<Assignment>.Failure()
-                                            .WithErrors(errors);
+            return DomainResult<Assignment>.Failure(errors);
         }
 
         Assignment assignment = new()
@@ -70,7 +69,6 @@ public sealed class Assignment : Entity<AssignmentId>
             Status = assignmentStatusResult.Value,
             UserId = userId
         };
-        return DomainResult<Assignment>.Success()
-                                       .WithValue(assignment);
+        return DomainResult<Assignment>.Success(assignment);
     }
 }

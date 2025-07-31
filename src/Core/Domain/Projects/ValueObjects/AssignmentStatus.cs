@@ -19,15 +19,13 @@ public sealed record AssignmentStatus : ValueObject
     {
         if (!Enum.IsDefined(value))
         {
-            return DomainResult<AssignmentStatus>.Failure()
-                                                 .WithErrors([DomainErrors.AssignmentErrors.INVALID_ASSIGNMENT_STATUS]);
+            return DomainResult<AssignmentStatus>.Failure([DomainErrors.AssignmentErrors.INVALID_ASSIGNMENT_STATUS]);
         }
 
         AssignmentStatus assignmentStatus = new()
         {
             Value = value
         };
-        return DomainResult<AssignmentStatus>.Success()
-                                             .WithValue(assignmentStatus);
+        return DomainResult<AssignmentStatus>.Success(assignmentStatus);
     }
 }

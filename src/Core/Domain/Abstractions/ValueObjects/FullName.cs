@@ -19,43 +19,36 @@ public sealed record FullName : ValueObject
 
     public static DomainResult<FullName> Create(string firstName, string lastName)
     {
-        List<string> errors = [];
-        if (string.IsNullOrWhiteSpace(firstName)) errors.Add(DomainErrors.UserErrors.FIRST_NAME_NOT_EMPTY);
-
-        if (string.IsNullOrWhiteSpace(lastName)) errors.Add(DomainErrors.UserErrors.LAST_NAME_NOT_EMPTY);
-
-        if(errors.Count > 0)
+         OperationResult validationResult = Validate(firstName, lastName);
+        if (!validationResult.IsSuccess)
         {
-            return DomainResult<FullName>.Failure()
-                                         .WithErrors(errors);
-        }   
+            return DomainResult<FullName>.Failure([..validationResult.Errors]);
+        }
 
         FullName fullName = new(firstName, lastName);
-        return DomainResult<FullName>.Success()
-                                     .WithDescription("FullName created successfully.")
-                                     .WithValue(fullName);
+        return DomainResult<FullName>.Success(fullName)
+                                     .WithDescription("FullName created successfully.");
     }
 
     public DomainResult<FullName> UpdateIfChanged(
-        string? newFirstName,
-        string? newLastName
+        string? firstName,
+        string? lastName
     )
     {
-        string? updatedFirstName = newFirstName ?? FirstName;
-        string? updatedLastName = newLastName ?? LastName;
+        string? updatedFirstName = firstName ?? FirstName;
+        string? updatedLastName = lastName ?? LastName;
 
         if (updatedFirstName == FirstName && updatedLastName == LastName)
         {
-            return DomainResult<FullName>.Success()
+            return DomainResult<FullName>.Success(this)
                                          .WithDescription("FullName remains unchanged.")
-                                         .WithValue(this)
                                          .WithUpdatedFieldCount(0);
         }
 
-        DomainResult<FullName> fullNameResult = Create(updatedFirstName, updatedLastName);
-        if (!fullNameResult.IsSuccess)
+        OperationResult validationResult = Validate(updatedFirstName, updatedLastName);
+        if (!validationResult.IsSuccess)
         {
-            return fullNameResult;
+            return DomainResult<FullName>.Failure([..validationResult.Errors]);
         }
 
         int updatedCount = 0;
@@ -63,6 +56,22 @@ public sealed record FullName : ValueObject
         if (updatedLastName != LastName) updatedCount++;
 
 
-        return fullNameResult.WithUpdatedFieldCount(updatedCount);
+        return DomainResult<FullName>.Success(this)
+                                     .WithUpdatedFieldCount(updatedCount);
+    }
+
+    private static OperationResult Validate(string firstName, string lastName)
+    {
+        List<string> errors = [];
+        if (string.IsNullOrWhiteSpace(firstName)) errors.Add(DomainErrors.UserErrors.FIRST_NAME_NOT_EMPTY);
+
+        if (string.IsNullOrWhiteSpace(lastName)) errors.Add(DomainErrors.UserErrors.LAST_NAME_NOT_EMPTY);
+
+        if (errors.Count > 0)
+        {
+            return OperationResult.Failure(errors);
+        }
+
+        return OperationResult.Success();
     }
 }

@@ -13,15 +13,24 @@ public sealed record PhoneNumber : ValueObject
 
     public static DomainResult<PhoneNumber> Create(string value)
     {
-        if (string.IsNullOrWhiteSpace(value) || !IsValidPhoneNumber(value))
+        OperationResult validationResult = Validate(value);
+        if(!validationResult.IsSuccess)
         {
-            return DomainResult<PhoneNumber>.Failure()
-                                            .WithErrors(["Invalid phone number."]);
+            return DomainResult<PhoneNumber>.Failure([..validationResult.Errors]);
         }
 
-        PhoneNumber phoneNumber = new PhoneNumber(value);
-        return DomainResult<PhoneNumber>.Success()
-                                        .WithValue(phoneNumber);
+        PhoneNumber phoneNumber = new(value);
+        return DomainResult<PhoneNumber>.Success(phoneNumber);
+    }
+
+    private static OperationResult Validate(string value)
+    {
+        List<string> errors = [];
+
+        if (string.IsNullOrWhiteSpace(value)) errors.Add("Phone number cannot be empty.");
+        if (!IsValidPhoneNumber(value)) errors.Add("Phone number format is invalid.");
+
+        return OperationResult.Success();
     }
 
     private static bool IsValidPhoneNumber(string value)

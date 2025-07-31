@@ -23,15 +23,13 @@ public sealed record ProjectStatus : ValueObject
     {
         if (!Enum.IsDefined(status))
         {
-            return DomainResult<ProjectStatus>.Failure()
-                                              .WithErrors([DomainErrors.ProjectErrors.INVALID_STATUS]);
+            return DomainResult<ProjectStatus>.Failure([DomainErrors.ProjectErrors.INVALID_STATUS]);
         }
 
         ProjectStatus projectStatus = new() 
         { 
             Value = status 
         };
-        return DomainResult<ProjectStatus>.Success()
-                                          .WithValue(projectStatus);
+        return DomainResult<ProjectStatus>.Success(projectStatus);
     }
 }

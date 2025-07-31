@@ -14,46 +14,52 @@ public sealed record EmailAddress : ValueObject
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return DomainResult<EmailAddress>.Failure()
-                                             .WithErrors([DomainErrors.UserErrors.EMAIL_NOT_EMPTY]);
+            return DomainResult<EmailAddress>.Failure([DomainErrors.UserErrors.EMAIL_NOT_EMPTY]);
         }
 
         if (!IsValidEmail(value))
         {
-            return DomainResult<EmailAddress>.Failure()
-                                             .WithErrors([DomainErrors.UserErrors.EMAIL_INVALID_FORMAT]);
+            return DomainResult<EmailAddress>.Failure([DomainErrors.UserErrors.EMAIL_INVALID_FORMAT]);
         }
 
         EmailAddress emailAddress = new(value);
-
-        return DomainResult<EmailAddress>.Success()
-                                         .WithDescription("EmailAddress created successfully.")
-                                         .WithValue(emailAddress);
+        return DomainResult<EmailAddress>.Success(emailAddress)
+                                         .WithDescription("EmailAddress created successfully.");
     }
-    public DomainResult<EmailAddress> UpdateIfChanged(string? newValue)
+    public DomainResult<EmailAddress> UpdateIfChanged(string email)
     {
-        if (string.IsNullOrWhiteSpace(newValue))
+        if (email == Value)
         {
-            return DomainResult<EmailAddress>.Success()
-                                             .WithDescription("EmailAddress not updated because input is null or empty.")
-                                             .WithValue(this);
+            return DomainResult<EmailAddress>.Success(this)
+                                             .WithDescription("EmailAddress remains unchanged.");
+        }
+       
+        OperationResult validationResult = Validate(email);
+        if (!validationResult.IsSuccess)
+        {
+            return DomainResult<EmailAddress>.Failure([..validationResult.Errors]);
         }
 
-        if (newValue == Value)
-        {
-            return DomainResult<EmailAddress>.Success()
-                                             .WithDescription("EmailAddress remains unchanged.")
-                                             .WithValue(this);
-        }
-
-        DomainResult<EmailAddress> createResult = Create(newValue);
-        if (!createResult.IsSuccess)
-        {
-            return createResult;
-        }
-
-        return createResult.WithUpdatedFieldCount(1);
+        return DomainResult<EmailAddress>.Success(this)
+                                         .WithUpdatedFieldCount(1);
     }
+
+    private static OperationResult Validate(string email)
+    {
+        List<string> errors = [];
+
+        if (string.IsNullOrWhiteSpace(email)) errors.Add(DomainErrors.UserErrors.EMAIL_NOT_EMPTY);
+
+        if (!IsValidEmail(email)) errors.Add(DomainErrors.UserErrors.EMAIL_INVALID_FORMAT);
+
+        if(errors.Count > 0)
+        {
+            return OperationResult.Failure(errors);
+        }
+
+        return OperationResult.Success();
+    }
+
     private static bool IsValidEmail(string email)
     {
         string emailRegexFormat = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";

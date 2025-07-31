@@ -67,8 +67,7 @@ public sealed class User : Entity<UserId>
 
         if(errors.Count > 0)
         {
-            return DomainResult<User>.Failure()
-                                     .WithErrors(errors);
+            return DomainResult<User>.Failure(errors);
         }
 
         User user = new()
@@ -84,9 +83,8 @@ public sealed class User : Entity<UserId>
             user.CreatedAt = createdAt.Value;
         }
 
-        return DomainResult<User>.Success()
-                                 .WithDescription("User created successfully.")
-                                 .WithValue(user);
+        return DomainResult<User>.Success(user)
+                                 .WithDescription("User created successfully.");
     }
 
     public DomainResult<User> SetPasswordHash(string passwordHash)
@@ -99,15 +97,14 @@ public sealed class User : Entity<UserId>
 
         if(errors.Count > 0)
         {
-            return DomainResult<User>.Failure()
-                                     .WithErrors(errors);
+            return DomainResult<User>.Failure(errors);
         }
 
         Password = passwordHash;
-        return DomainResult<User>.Success()
-                                 .WithValue(this);
+        return DomainResult<User>.Success(this);
 
     }   
+
     public DomainResult<User> Update(
        string? firstName,
        string? lastName,
@@ -132,44 +129,39 @@ public sealed class User : Entity<UserId>
 
         if (errors.Count > 0)
         {
-            return DomainResult<User>.Failure()
-                                     .WithErrors(errors);
+            return DomainResult<User>.Failure(errors);
         }
 
         string descriptionMessage = totalUpdatedCount > 0
                                     ? $"User updated successfully. {totalUpdatedCount}"
                                     : "No changes were made.";
 
-        return DomainResult<User>.Success()
-                                 .WithValue(this)
+        return DomainResult<User>.Success(this)
                                  .WithDescription(descriptionMessage);
     }
 
     public DomainResult<User> UpdateFullName(string? firstName, string? lastName)
     {
-        DomainResult<FullName> result = FullName.UpdateIfChanged(firstName, lastName);
-        if (!result.IsSuccess)
+        DomainResult<FullName> fullNameResult = FullName.UpdateIfChanged(firstName, lastName);
+        if (!fullNameResult.IsSuccess)
         {
-            return DomainResult<User>.Failure()
-                                     .WithErrors(result.Errors);
+            return DomainResult<User>.Failure(fullNameResult.Errors);
         }
 
-        FullName = result.Value;
-        return DomainResult<User>.Success()
-                                 .WithValue(this)
-                                 .WithUpdatedFieldCount(result.UpdatedFieldCount);
+        FullName = fullNameResult.Value;
+        return DomainResult<User>.Success(this)
+                                 .WithUpdatedFieldCount(fullNameResult.UpdatedFieldCount);
     }
 
     public DomainResult<User> UpdateEmail(string? email)
     {
-        DomainResult<EmailAddress> result = EmailAddress.UpdateIfChanged(email);
-        if (!result.IsSuccess)
-            return DomainResult<User>.Failure().WithErrors(result.Errors);
+        DomainResult<EmailAddress> emailAddressResult = EmailAddress.UpdateIfChanged(email);
+        if (!emailAddressResult.IsSuccess)
+            return DomainResult<User>.Failure(emailAddressResult.Errors);
 
-        EmailAddress = result.Value;
-        return DomainResult<User>.Success()
-                                 .WithValue(this)
-                                 .WithUpdatedFieldCount(result.UpdatedFieldCount);
+        EmailAddress = emailAddressResult.Value;
+        return DomainResult<User>.Success(this)
+                                 .WithUpdatedFieldCount(emailAddressResult.UpdatedFieldCount);
     }
 
     public DomainResult<User> UpdateUserRole(UserRole.UserRolesEnum? userRole)
@@ -177,18 +169,10 @@ public sealed class User : Entity<UserId>
         DomainResult<UserRole> userRoleResult = UserRole.UpdateIfChanged(userRole);
         if (!userRoleResult.IsSuccess)
         {
-            return DomainResult<User>.Failure()
-                                     .WithErrors(userRoleResult.Errors);
+            return DomainResult<User>.Failure(userRoleResult.Errors);
         }
 
-        return DomainResult<User>.Success()
-                                 .WithValue(this)
+        return DomainResult<User>.Success(this)
                                  .WithUpdatedFieldCount(userRoleResult.UpdatedFieldCount);
-    }
-
-    public void SoftDelete()
-    {
-        IsDeleted = true;
-        DeletedAt = DateTime.UtcNow;
     }
 }
