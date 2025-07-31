@@ -3,6 +3,7 @@ using Core.Contracts.DTOs.Users.Response;
 using Core.Contracts.Result;
 using Core.Contracts.UnitOfWork;
 using Core.Contracts.UseCases.Users;
+using Core.Domain.Abstractions;
 using Core.Domain.Users;
 using Core.Utilities.Mappers;
 using Core.Utilities.Validations;
@@ -53,8 +54,7 @@ public class CreateUser : ICreateUser
             requestDto.LastName,
             requestDto.Email,
             requestDto.Password,
-            requestDto.Role,
-            DateTime.UtcNow
+            requestDto.Role
         );
         if (!userResult.IsSuccess)
         {

@@ -50,8 +50,7 @@ public sealed class User : Entity<UserId>
         string lastName,
         string email,
         string password,
-        UserRole.UserRolesEnum userRole,
-        DateTime? createdAt = default!
+        UserRole.UserRolesEnum userRole
     )
     {
         List<string> errors = [];
@@ -77,11 +76,6 @@ public sealed class User : Entity<UserId>
             FullName = fullNameResult.Value,
             UserRole = userRoleResult.Value,
         };
-
-        if (createdAt.HasValue)
-        {
-            user.CreatedAt = createdAt.Value;
-        }
 
         return DomainResult<User>.Success(user)
                                  .WithDescription("User created successfully.");

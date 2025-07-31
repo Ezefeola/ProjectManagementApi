@@ -3,6 +3,7 @@ using Core.Contracts.DTOs.Projects.Response;
 using Core.Contracts.Result;
 using Core.Contracts.UnitOfWork;
 using Core.Contracts.UseCases.Projects;
+using Core.Domain.Abstractions;
 using Core.Domain.Projects;
 using Core.Utilities.Mappers;
 using FluentValidation;
