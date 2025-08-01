@@ -1,12 +1,13 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Core.Contracts.Authentication;
 using Core.Domain.Users;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Core.Services.Token;
-public class TokenService(IConfiguration _configuration) : ITokenService
+namespace Adapter.SqlServer.Authentication;
+public class TokenProvider(IConfiguration _configuration) : ITokenProvider
 {
     public string GenerateToken(User user)
     {

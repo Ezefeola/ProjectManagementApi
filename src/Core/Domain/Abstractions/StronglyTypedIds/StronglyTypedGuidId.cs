@@ -14,14 +14,6 @@ public abstract record StronglyTypedGuidId<TId> : StronglyTypedId<Guid>
         };
     }
 
-    public static TId NewEfId(Guid value)
-    {
-        return new TId() 
-        {
-            Value = value 
-        };
-    }
-
     //public static DomainResult<TId> Create(Guid value)
     //{
     //    if (value == Guid.Empty)

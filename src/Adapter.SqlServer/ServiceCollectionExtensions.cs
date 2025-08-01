@@ -1,7 +1,11 @@
-﻿using Adapter.SqlServer.Data;
+﻿using Adapter.SqlServer.Authentication;
+using Adapter.SqlServer.Data;
 using Adapter.SqlServer.Repositories;
+using Core.Contracts.Authentication;
 using Core.Contracts.Repositories;
 using Core.Contracts.UnitOfWork;
+using Core.Domain.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -13,6 +17,7 @@ public static class ServiceCollectionExtensions
     {
         services.ConfigureDbContext(connectionString);
         services.ConfigureHealthChecks();
+        services.AddAuthentication();
         services.AddUnitOfWork();
         services.AddRepositories();
     }
@@ -29,6 +34,13 @@ public static class ServiceCollectionExtensions
     {
         services.AddHealthChecks()
             .AddDbContextCheck<ApplicationDbContext>("Database Health", HealthStatus.Unhealthy);
+    }
+
+    private static void AddAuthentication(this IServiceCollection services)
+    {
+        services.AddScoped<ITokenProvider, TokenProvider>()
+                .AddScoped<IUserInfo, UserInfo>()
+                .AddScoped<IPasswordHasher<User>, PasswordHasher<User>>() ;
     }
 
     private static void AddUnitOfWork(this IServiceCollection services)

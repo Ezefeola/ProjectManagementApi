@@ -1,7 +1,8 @@
 ﻿using System.Security.Claims;
+using Core.Contracts.Authentication;
 using Microsoft.AspNetCore.Http;
 
-namespace Core.Utilities.UserInfo;
+namespace Adapter.SqlServer.Authentication;
 public class UserInfo : IUserInfo
 {
     public UserInfo(IHttpContextAccessor httpContextAccessor)

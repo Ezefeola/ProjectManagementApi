@@ -11,7 +11,7 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
 
-namespace Core.UseCases.Auth;
+namespace Core.UseCases.Users;
 public class Login : ILogin
 {
     private readonly IUnitOfWork _unitOfWork;

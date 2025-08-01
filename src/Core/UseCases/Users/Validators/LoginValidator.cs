@@ -2,7 +2,7 @@
 using Core.Utilities.Validations;
 using FluentValidation;
 
-namespace Core.UseCases.Auth.Validators;
+namespace Core.UseCases.Users.Validators;
 public class LoginValidator : AbstractValidator<LoginRequestDto>
 {
 	public LoginValidator()

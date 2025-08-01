@@ -1,7 +1,6 @@
 ﻿using Core.Domain.Abstractions;
 using Core.Domain.Abstractions.ValueObjects;
 using Core.Domain.Projects.Entities;
-using Core.Domain.Projects.ValueObjects;
 using Core.Domain.Users.ValueObjects;
 
 namespace Core.Domain.Users;
