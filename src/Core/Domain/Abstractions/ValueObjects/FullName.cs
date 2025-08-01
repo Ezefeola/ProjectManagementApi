@@ -1,5 +1,4 @@
 ﻿using Core.Contracts.Models;
-using Core.Domain.Abstractions;
 
 namespace Core.Domain.Abstractions.ValueObjects;
 public sealed record FullName : ValueObject

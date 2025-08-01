@@ -1,5 +1,4 @@
 ﻿using Core.Contracts.Models;
-using Core.Domain.Abstractions;
 using System.Text.RegularExpressions;
 
 namespace Core.Domain.Abstractions.ValueObjects;
