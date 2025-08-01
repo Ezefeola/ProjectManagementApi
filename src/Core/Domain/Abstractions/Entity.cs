@@ -8,7 +8,7 @@ public abstract class Entity : IEntity
     public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
 
-    public void MakAsUpdated()
+    public void MarkAsUpdated()
     {
         UpdatedAt = DateTime.UtcNow;
     }
@@ -17,14 +17,14 @@ public abstract class Entity : IEntity
     {
         IsDeleted = true;
         DeletedAt = DateTime.UtcNow;
-        MakAsUpdated();
+        MarkAsUpdated();
     }
 
     public void Restore()
     {
         IsDeleted = false;
         DeletedAt = null;
-        MakAsUpdated();
+        MarkAsUpdated();
     }
 }
 public abstract class Entity<TId> : Entity, IEquatable<Entity<TId>>, IEntity<TId>
