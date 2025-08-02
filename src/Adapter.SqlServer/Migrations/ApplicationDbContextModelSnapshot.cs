@@ -201,11 +201,6 @@ namespace Adapter.SqlServer.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("Email");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -243,9 +238,6 @@ namespace Adapter.SqlServer.Migrations
                         });
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmailAddress")
-                        .IsUnique();
 
                     b.HasIndex("IsDeleted")
                         .HasFilter("IsDeleted = 0");
@@ -296,6 +288,31 @@ namespace Adapter.SqlServer.Migrations
                     b.HasOne("Core.Domain.Projects.Project", null)
                         .WithMany("Users")
                         .HasForeignKey("ProjectId");
+
+                    b.OwnsOne("Core.Domain.Abstractions.ValueObjects.EmailAddress", "EmailAddress", b1 =>
+                        {
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(255)
+                                .HasColumnType("nvarchar(255)")
+                                .HasColumnName("Email");
+
+                            b1.HasKey("UserId");
+
+                            b1.HasIndex("Value")
+                                .IsUnique();
+
+                            b1.ToTable("User");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
+                    b.Navigation("EmailAddress")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Core.Domain.Projects.Project", b =>

@@ -1,4 +1,4 @@
-﻿using Adapter.Api.Configurations.EndpointsConfig;
+﻿using Adapter.Api.Endpoints.Abstractions;
 
 namespace Adapter.Api.Endpoints.Auth;
 public class AuthEndpointsGroup : IEndpointGroup

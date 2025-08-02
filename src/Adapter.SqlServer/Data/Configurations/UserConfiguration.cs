@@ -34,15 +34,25 @@ public class UserConfiguration : EntityTypeBaseConfiguration<User>
                            .HasColumnName(User.ColumnNames.LastName);
         });
 
-        builder.Property(x => x.EmailAddress)
-               .IsRequired()
-               .HasConversion(
-                    x => x.Value,
-                    value => EmailAddress.Create(value).Value
-               )
-               .HasColumnName(User.ColumnNames.Email);
-        builder.HasIndex(x => x.EmailAddress)
-                   .IsUnique();
+        builder.OwnsOne(x => x.EmailAddress, emailBuilder =>
+        {
+            emailBuilder.Property(x => x.Value)
+                        .IsRequired()
+                        .HasMaxLength(User.Rules.EMAIL_MAX_LENGTH)
+                        .HasColumnName(User.ColumnNames.Email);
+
+            emailBuilder.HasIndex(x => x.Value)
+                        .IsUnique();
+        });
+        //builder.Property(x => x.EmailAddress)
+        //       .IsRequired()
+        //       .HasConversion(
+        //            x => x.Value,
+        //            value => EmailAddress.Create(value).Value
+        //       )
+        //       .HasColumnName(User.ColumnNames.Email);
+        //builder.HasIndex(x => x.EmailAddress.Value)
+        //       .IsUnique();
 
         builder.Property(x => x.UserRole)
                .IsRequired()

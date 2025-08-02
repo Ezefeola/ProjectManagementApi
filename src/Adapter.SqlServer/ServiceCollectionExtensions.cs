@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
     {
         services.ConfigureDbContext(connectionString);
         services.ConfigureHealthChecks();
-        services.AddAuthentication();
+        services.AddAuthenticationInternal();
         services.AddUnitOfWork();
         services.AddRepositories();
     }
@@ -36,7 +36,7 @@ public static class ServiceCollectionExtensions
             .AddDbContextCheck<ApplicationDbContext>("Database Health", HealthStatus.Unhealthy);
     }
 
-    private static void AddAuthentication(this IServiceCollection services)
+    private static void AddAuthenticationInternal(this IServiceCollection services)
     {
         services.AddScoped<ITokenProvider, TokenProvider>()
                 .AddScoped<IUserInfo, UserInfo>()

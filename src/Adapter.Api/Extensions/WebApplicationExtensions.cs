@@ -1,7 +1,8 @@
-﻿using System.Text.Json;
-using Adapter.Api.Configurations.EndpointsConfig;
+﻿using Adapter.Api.Filters;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
+using System.Reflection;
+using System.Text.Json;
 
 namespace Adapter.Api.Extensions;
 public static class WebApplicationExtensions
@@ -76,7 +77,14 @@ public static class WebApplicationExtensions
 
     private static void UseMapEndpointsConfig(WebApplication app)
     {
-        app.MapEndpoints("/api");
+        app.MapEndpoints(Assembly.GetExecutingAssembly(), options =>
+        {
+            options.BasePrefix = "/api";
+            options.ConfigureGroup = group =>
+            {
+                group.AddEndpointFilter<ResultHttpCodeFilter>();
+            };
+        });
     }
 
     private static void UseHttpsRedirectionConfig(WebApplication app)

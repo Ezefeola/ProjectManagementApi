@@ -1,10 +1,10 @@
-﻿using Core.Contracts.DTOs.Auth.Request;
+﻿using Core.Contracts.Authentication;
+using Core.Contracts.DTOs.Auth.Request;
 using Core.Contracts.DTOs.Auth.Response;
 using Core.Contracts.Result;
 using Core.Contracts.UnitOfWork;
 using Core.Contracts.UseCases.Auth;
 using Core.Domain.Users;
-using Core.Services.Token;
 using Core.Utilities.Validations;
 using FluentValidation;
 using FluentValidation.Results;
@@ -15,19 +15,19 @@ namespace Core.UseCases.Users;
 public class Login : ILogin
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly ITokenService _tokenService;
+    private readonly ITokenProvider _tokenProvider;
     private readonly IPasswordHasher<User> _passwordHasher;
     private readonly IValidator<LoginRequestDto> _validator;
 
     public Login(
         IUnitOfWork unitOfWork,
-        ITokenService tokenService,
+        ITokenProvider tokenProvider,
         IPasswordHasher<User> passwordHasher,
         IValidator<LoginRequestDto> validator
     )
     {
         _unitOfWork = unitOfWork;
-        _tokenService = tokenService;
+        _tokenProvider = tokenProvider;
         _passwordHasher = passwordHasher;
         _validator = validator;
     }
@@ -65,7 +65,7 @@ public class Login : ILogin
 
         LoginResponseDto responseDto = new()
         {
-            Token = _tokenService.GenerateToken(user)
+            Token = _tokenProvider.GenerateToken(user)
         };
 
         return Result<LoginResponseDto>.Success(HttpStatusCode.OK)

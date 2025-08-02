@@ -1,4 +1,4 @@
-﻿using Adapter.Api.Configurations.EndpointsConfig;
+﻿using Adapter.Api.Endpoints.Abstractions;
 using Core.Contracts.DTOs.Projects.Request;
 using Core.Contracts.DTOs.Projects.Response;
 using Core.Contracts.DTOs.Users.Response;

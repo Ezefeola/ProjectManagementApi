@@ -35,6 +35,7 @@ public sealed class User : Entity<UserId>
         public const string RequireManager = "RequireManager";
         public const string RequireCollaborator = "RequireCollaborator";
     }
+
     private User() { }
 
     public FullName FullName { get; private set; } = default!;
