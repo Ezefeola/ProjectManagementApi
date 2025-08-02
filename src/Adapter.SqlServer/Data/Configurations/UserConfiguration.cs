@@ -44,15 +44,6 @@ public class UserConfiguration : EntityTypeBaseConfiguration<User>
             emailBuilder.HasIndex(x => x.Value)
                         .IsUnique();
         });
-        //builder.Property(x => x.EmailAddress)
-        //       .IsRequired()
-        //       .HasConversion(
-        //            x => x.Value,
-        //            value => EmailAddress.Create(value).Value
-        //       )
-        //       .HasColumnName(User.ColumnNames.Email);
-        //builder.HasIndex(x => x.EmailAddress.Value)
-        //       .IsUnique();
 
         builder.Property(x => x.UserRole)
                .IsRequired()

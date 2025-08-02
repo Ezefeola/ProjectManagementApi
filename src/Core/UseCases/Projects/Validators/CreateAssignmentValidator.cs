@@ -1,5 +1,5 @@
 ﻿using Core.Contracts.DTOs.Projects.Request;
-using Core.Domain.Abstractions;
+using Core.Domain.Common;
 using Core.Domain.Projects.Entities;
 using Core.Utilities.Validations;
 using FluentValidation;

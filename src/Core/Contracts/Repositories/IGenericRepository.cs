@@ -1,4 +1,4 @@
-﻿using Core.Contracts.Models;
+﻿using Core.Domain.Abstractions.Interfaces;
 namespace Core.Contracts.Repositories;
 
 public interface IGenericRepository<TEntity> 

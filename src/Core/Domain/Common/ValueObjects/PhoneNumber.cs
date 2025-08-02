@@ -1,7 +1,9 @@
 ﻿using Core.Contracts.Models;
+using Core.Domain.Abstractions.ValueObjects;
+using Core.Domain.Common.DomainResults;
 using System.Text.RegularExpressions;
 
-namespace Core.Domain.Abstractions.ValueObjects;
+namespace Core.Domain.Common.ValueObjects;
 public sealed record PhoneNumber : ValueObject
 {
     public string Value { get; }

@@ -1,4 +1,4 @@
-﻿namespace Core.Contracts.Models;
+﻿namespace Core.Domain.Abstractions.Interfaces;
 public interface IEntity
 {
     public DateTime CreatedAt { get; set; }

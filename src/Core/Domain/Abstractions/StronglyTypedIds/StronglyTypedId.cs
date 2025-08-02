@@ -1,4 +1,4 @@
-﻿using Core.Contracts.Models;
+﻿using Core.Domain.Abstractions.ValueObjects;
 
 namespace Core.Domain.Abstractions.StronglyTypedIds;
 public abstract record StronglyTypedId<TId> : ValueObject

@@ -1,5 +1,5 @@
-﻿using Core.Contracts.Models;
-using Core.Domain.Abstractions;
+﻿using Core.Domain.Abstractions.ValueObjects;
+using Core.Domain.Common.DomainResults;
 
 namespace Core.Domain.Users.ValueObjects;
 public sealed record UserRole : ValueObject

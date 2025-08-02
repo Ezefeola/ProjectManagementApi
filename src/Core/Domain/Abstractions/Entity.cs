@@ -1,4 +1,4 @@
-﻿using Core.Contracts.Models;
+﻿using Core.Domain.Abstractions.Interfaces;
 
 namespace Core.Domain.Abstractions;
 public abstract class Entity : IEntity

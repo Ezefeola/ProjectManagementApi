@@ -1,6 +1,6 @@
 ﻿using Adapter.SqlServer.Data;
-using Core.Contracts.Models;
 using Core.Contracts.Repositories;
+using Core.Domain.Abstractions.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Adapter.SqlServer.Repositories;

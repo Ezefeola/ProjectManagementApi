@@ -1,6 +1,7 @@
 ﻿using Core.Contracts.Models;
+using Core.Domain.Common.DomainResults;
 
-namespace Core.Domain.Abstractions.ValueObjects;
+namespace Core.Domain.Common.ValueObjects;
 public sealed record DateRange
 {
     public DateTime StartDate { get; }

@@ -1,4 +1,6 @@
-﻿namespace Core.Domain.Abstractions.StronglyTypedIds;
+﻿using Core.Domain.Abstractions.StronglyTypedIds;
+
+namespace Core.Domain.Common.StronglyTypedIds;
 public abstract record StronglyTypedGuidId<TId> : StronglyTypedId<Guid>
     where TId : StronglyTypedGuidId<TId>, new()
 {

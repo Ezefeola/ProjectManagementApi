@@ -1,6 +1,8 @@
 ﻿using Core.Contracts.Models;
+using Core.Domain.Abstractions.ValueObjects;
+using Core.Domain.Common.DomainResults;
 
-namespace Core.Domain.Abstractions.ValueObjects;
+namespace Core.Domain.Common.ValueObjects;
 public sealed record FullName : ValueObject
 {
     public string FirstName { get; } = default!;

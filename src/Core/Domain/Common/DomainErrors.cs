@@ -2,7 +2,7 @@
 using Core.Domain.Projects.Entities;
 using Core.Domain.Users;
 
-namespace Core.Domain.Abstractions;
+namespace Core.Domain.Common;
 public static class DomainErrors
 {
     public static readonly string START_DATE_GREATER_THAN_END_DATE = "Start date must be before end date.";
