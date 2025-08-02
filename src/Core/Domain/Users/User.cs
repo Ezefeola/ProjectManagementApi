@@ -36,7 +36,6 @@ public sealed class User : Entity<UserId>
     public string Password { get; private set; } = default!;
     public UserRole Role { get; private set; } = default!;
     public List<ProjectUser> ProjectUsers { get; set; } = [];
-    public List<Assignment> Assignments { get; set; } = [];
 
     public static DomainResult<User> Create(
         string firstName,

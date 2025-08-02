@@ -11,21 +11,21 @@ public class ProjectUsersConfiguration : EntityTypeBaseConfiguration<ProjectUser
     {
         //builder.HasKey(ProjectUser.ColumnNames.ProjectId, ProjectUser.ColumnNames.UserId);
         builder.HasKey(x => new {x.ProjectId, x.UserId });
-        builder.Property(x => x.ProjectId)
-               .HasConversion(
-                    projectId => projectId.Value,
-                    value => ProjectId.Create(value)
-               )
-               .HasColumnName(nameof(ProjectId))
-               .ValueGeneratedNever();
+        //builder.Property(x => x.ProjectId)
+        //       .HasConversion(
+        //            projectId => projectId.Value,
+        //            value => ProjectId.Create(value)
+        //       )
+        //       .HasColumnName(nameof(ProjectId))
+        //       .ValueGeneratedNever();
 
-        builder.Property(x => x.UserId)
-               .HasConversion(
-                    userId => userId.Value,
-                    value => UserId.Create(value)
-               )
-               .HasColumnName(nameof(UserId))
-               .ValueGeneratedNever();
+        //builder.Property(x => x.UserId)
+        //       .HasConversion(
+        //            userId => userId.Value,
+        //            value => UserId.Create(value)
+        //       )
+        //       .HasColumnName(nameof(UserId))
+        //       .ValueGeneratedNever();
         //builder.ComplexProperty(x => x.Id, idBuilder =>
         //{
         //    idBuilder.Property(x => x.ProjectId)

@@ -23,8 +23,6 @@ public sealed class Project : AggregateRoot<ProjectId>
     public ProjectStatus Status { get; private set; } = default!;
     private readonly List<Assignment> _assignments = [];
     public IReadOnlyList<Assignment> Assignments => _assignments;
-    private readonly List<User> _users = [];
-    public IReadOnlyList<User> Users => _users;
     private readonly List<ProjectUser> _projectUsers = [];
     public IReadOnlyList<ProjectUser> ProjectUsers => _projectUsers;
 
@@ -74,8 +72,6 @@ public sealed class Project : AggregateRoot<ProjectId>
             return DomainResult.Failure([DomainErrors.ProjectErrors.INVALID_ASSIGNMENT_PROJECT_COMPLETED]);
         }
 
-        List<string> errors = [];   
-
         DomainResult<Assignment> assignmentResult = Assignment.Create(
             Id,
             title,
@@ -84,12 +80,7 @@ public sealed class Project : AggregateRoot<ProjectId>
             description,
             userId
         );
-        if (!assignmentResult.IsSuccess) errors.AddRange(assignmentResult.Errors); 
-        
-        if (errors.Count > 0)
-        {
-            return DomainResult.Failure(errors);
-        }
+        if (!assignmentResult.IsSuccess) return DomainResult.Failure(assignmentResult.Errors);
 
         _assignments.Add(assignmentResult.Value);
 

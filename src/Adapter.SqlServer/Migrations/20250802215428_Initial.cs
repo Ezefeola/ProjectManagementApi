@@ -38,7 +38,6 @@ namespace Adapter.SqlServer.Migrations
                     EmailAddress = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
-                    ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
@@ -49,11 +48,6 @@ namespace Adapter.SqlServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_User_Project_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Project",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -161,11 +155,6 @@ namespace Adapter.SqlServer.Migrations
                 table: "User",
                 column: "IsDeleted",
                 filter: "IsDeleted = 0");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_ProjectId",
-                table: "User",
-                column: "ProjectId");
         }
 
         /// <inheritdoc />
@@ -178,10 +167,10 @@ namespace Adapter.SqlServer.Migrations
                 name: "ProjectUser");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Project");
 
             migrationBuilder.DropTable(
-                name: "Project");
+                name: "User");
         }
     }
 }

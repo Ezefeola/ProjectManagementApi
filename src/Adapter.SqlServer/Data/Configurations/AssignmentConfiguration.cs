@@ -22,33 +22,37 @@ public class AssignmentConfiguration : EntityTypeBaseConfiguration<Assignment>
                .HasForeignKey(x => x.ProjectId);
 
         builder.HasOne(x => x.User)
-               .WithMany(x => x.Assignments)
+               .WithMany()
                .HasForeignKey(x => x.UserId);
     }
 
     protected override void ConfigurateProperties(EntityTypeBuilder<Assignment> builder)
     {
         builder.Property(x => x.Title)
+               .IsRequired()
                .HasMaxLength(Assignment.Rules.TITLE_MAX_LENGTH)
                .HasColumnName(nameof(Assignment.Title));
 
         builder.Property(x => x.Description)
+               .IsRequired(false)
                .HasMaxLength(Assignment.Rules.DESCRIPTION_MAX_LENGTH)
                .HasColumnName(nameof(Assignment.Description));
 
         builder.Property(x => x.EstimatedHours)
+               .IsRequired(false)
                .HasPrecision(18, 2)
                .HasColumnName(nameof(Assignment.EstimatedHours));
 
         builder.Property(x => x.LoggedHours)
+               .IsRequired(false)
                .HasPrecision(18, 2)
                .HasColumnName(nameof(Assignment.LoggedHours));
 
         builder.ComplexProperty(x => x.Status, assignmentStatusBuilder =>
         {
             assignmentStatusBuilder.Property(x => x.Value)
-                .HasConversion<string>()
-                .HasColumnName(nameof(Assignment.Status));
+                                   .HasConversion<string>()
+                                   .HasColumnName(nameof(Assignment.Status));
         });
 
         BaseEntityConfig.ApplyTo<Assignment>(builder);

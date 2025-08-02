@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Adapter.SqlServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250802213216_Initial")]
+    [Migration("20250802215428_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -99,12 +99,10 @@ namespace Adapter.SqlServer.Migrations
             modelBuilder.Entity("Core.Domain.Projects.Entities.ProjectUser", b =>
                 {
                     b.Property<Guid>("ProjectId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ProjectId");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("UserId");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -212,9 +210,6 @@ namespace Adapter.SqlServer.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Password");
 
-                    b.Property<Guid?>("ProjectId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Role")
                         .HasColumnType("int")
                         .HasColumnName("Role");
@@ -245,8 +240,6 @@ namespace Adapter.SqlServer.Migrations
                     b.HasIndex("IsDeleted")
                         .HasFilter("IsDeleted = 0");
 
-                    b.HasIndex("ProjectId");
-
                     b.ToTable("User");
                 });
 
@@ -259,7 +252,7 @@ namespace Adapter.SqlServer.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Domain.Users.User", "User")
-                        .WithMany("Assignments")
+                        .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("Project");
@@ -288,10 +281,6 @@ namespace Adapter.SqlServer.Migrations
 
             modelBuilder.Entity("Core.Domain.Users.User", b =>
                 {
-                    b.HasOne("Core.Domain.Projects.Project", null)
-                        .WithMany("Users")
-                        .HasForeignKey("ProjectId");
-
                     b.OwnsOne("Core.Domain.Common.ValueObjects.EmailAddress", "EmailAddress", b1 =>
                         {
                             b1.Property<Guid>("UserId")
@@ -323,14 +312,10 @@ namespace Adapter.SqlServer.Migrations
                     b.Navigation("Assignments");
 
                     b.Navigation("ProjectUsers");
-
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Core.Domain.Users.User", b =>
                 {
-                    b.Navigation("Assignments");
-
                     b.Navigation("ProjectUsers");
                 });
 #pragma warning restore 612, 618
