@@ -16,11 +16,11 @@ public class CreateProjectValidator : AbstractValidator<CreateProjectRequestDto>
                 .WithMessage(ValidationMessages.MAX_LENGTH);
 
         RuleFor(x => x.StartDate)
-           .GreaterThan(x => x.EndDate)
+           .LessThan(x => x.EndDate)
                .WithMessage(DomainErrors.ProjectErrors.START_DATE_BEFORE_END_DATE);
 
         RuleFor(x => x.EndDate)
-           .LessThan(x => x.StartDate)
+           .GreaterThan(x => x.StartDate)
                .WithMessage(DomainErrors.ProjectErrors.START_DATE_BEFORE_END_DATE);
 
         RuleFor(x => x.Status)
