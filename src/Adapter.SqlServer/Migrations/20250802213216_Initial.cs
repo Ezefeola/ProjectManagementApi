@@ -35,9 +35,9 @@ namespace Adapter.SqlServer.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    EmailAddress = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserRole = table.Column<int>(type: "int", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
                     ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -151,9 +151,9 @@ namespace Adapter.SqlServer.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_Email",
+                name: "IX_User_EmailAddress",
                 table: "User",
-                column: "Email",
+                column: "EmailAddress",
                 unique: true);
 
             migrationBuilder.CreateIndex(

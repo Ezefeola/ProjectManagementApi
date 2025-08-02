@@ -14,7 +14,7 @@ public class AssignmentConfiguration : EntityTypeBaseConfiguration<Assignment>
                    id => id.Value,
                    value => AssignmentId.Create(value)
                )
-               .HasColumnName(Assignment.ColumnNames.Id)
+               .HasColumnName(nameof(Assignment.Id))
                .ValueGeneratedNever();
 
         builder.HasOne(x => x.Project)
@@ -30,25 +30,25 @@ public class AssignmentConfiguration : EntityTypeBaseConfiguration<Assignment>
     {
         builder.Property(x => x.Title)
                .HasMaxLength(Assignment.Rules.TITLE_MAX_LENGTH)
-               .HasColumnName(Assignment.ColumnNames.Title);
+               .HasColumnName(nameof(Assignment.Title));
 
         builder.Property(x => x.Description)
                .HasMaxLength(Assignment.Rules.DESCRIPTION_MAX_LENGTH)
-               .HasColumnName(Assignment.ColumnNames.Description);
+               .HasColumnName(nameof(Assignment.Description));
 
         builder.Property(x => x.EstimatedHours)
                .HasPrecision(18, 2)
-               .HasColumnName(Assignment.ColumnNames.EstimatedHours);
+               .HasColumnName(nameof(Assignment.EstimatedHours));
 
         builder.Property(x => x.LoggedHours)
                .HasPrecision(18, 2)
-               .HasColumnName(Assignment.ColumnNames.LoggedHours);
+               .HasColumnName(nameof(Assignment.LoggedHours));
 
         builder.ComplexProperty(x => x.Status, assignmentStatusBuilder =>
         {
             assignmentStatusBuilder.Property(x => x.Value)
                 .HasConversion<string>()
-                .HasColumnName(Assignment.ColumnNames.Status);
+                .HasColumnName(nameof(Assignment.Status));
         });
 
         BaseEntityConfig.ApplyTo<Assignment>(builder);

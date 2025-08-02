@@ -14,7 +14,7 @@ public class ProjectConfiguration : EntityTypeBaseConfiguration<Project>
                    id => id.Value,
                    value => ProjectId.Create(value)
                )
-               .HasColumnName(Project.ColumnNames.Id)
+               .HasColumnName(nameof(Project.Id))
                .ValueGeneratedNever();
     }
 
@@ -23,18 +23,18 @@ public class ProjectConfiguration : EntityTypeBaseConfiguration<Project>
         builder.Property(x => x.Name)
                .IsRequired()
                .HasMaxLength(Project.Rules.NAME_MAX_LENGTH)
-               .HasColumnName(Project.ColumnNames.Name);
+               .HasColumnName(nameof(Project.Name));
 
         builder.ComplexProperty(x => x.ProjectPeriod, periodBuilder =>
         {
             periodBuilder.Property(x => x.StartDate)
                         .IsRequired()
-                        .HasColumnName(Project.ColumnNames.StartDate)
+                        .HasColumnName(nameof(Project.ProjectPeriod.StartDate))
                         .HasColumnType("datetime");
 
             periodBuilder.Property(x => x.EndDate)
                          .IsRequired()
-                         .HasColumnName(Project.ColumnNames.EndDate)
+                         .HasColumnName(nameof(Project.ProjectPeriod.EndDate))
                          .HasColumnType("datetime");
         });
 
@@ -44,7 +44,7 @@ public class ProjectConfiguration : EntityTypeBaseConfiguration<Project>
                          .HasConversion<string>()
                          .IsRequired()
                          .HasMaxLength(Project.Rules.STATUS_MAX_LENGTH)
-                         .HasColumnName(Project.ColumnNames.Status);
+                         .HasColumnName(nameof(Project.Status));
         });
 
         BaseEntityConfig.ApplyTo<Project>(builder);

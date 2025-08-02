@@ -12,7 +12,7 @@ public static class UserMappers
             FirstName = user.FullName.FirstName,
             LastName = user.FullName.LastName,
             Email = user.EmailAddress.Value,
-            Role = user.UserRole.Value.ToString(),
+            Role = user.Role.Value.ToString(),
         };
     }
 

@@ -212,13 +212,13 @@ namespace Adapter.SqlServer.Migrations
                     b.Property<Guid?>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int")
+                        .HasColumnName("Role");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime");
-
-                    b.Property<int>("UserRole")
-                        .HasColumnType("int")
-                        .HasColumnName("UserRole");
 
                     b.ComplexProperty<Dictionary<string, object>>("FullName", "Core.Domain.Users.User.FullName#FullName", b1 =>
                         {
@@ -289,7 +289,7 @@ namespace Adapter.SqlServer.Migrations
                         .WithMany("Users")
                         .HasForeignKey("ProjectId");
 
-                    b.OwnsOne("Core.Domain.Abstractions.ValueObjects.EmailAddress", "EmailAddress", b1 =>
+                    b.OwnsOne("Core.Domain.Common.ValueObjects.EmailAddress", "EmailAddress", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");
@@ -298,7 +298,7 @@ namespace Adapter.SqlServer.Migrations
                                 .IsRequired()
                                 .HasMaxLength(255)
                                 .HasColumnType("nvarchar(255)")
-                                .HasColumnName("Email");
+                                .HasColumnName("EmailAddress");
 
                             b1.HasKey("UserId");
 

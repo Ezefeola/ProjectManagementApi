@@ -8,18 +8,6 @@ using Core.Domain.Users.ValueObjects;
 namespace Core.Domain.Projects.Entities;
 public sealed class Assignment : Entity<AssignmentId>
 {
-    public static class ColumnNames
-    {
-        public const string Id = "Id";
-        public const string UserId = "UserId";
-        public const string Title = "Title";
-        public const string Description = "Description";
-        public const string EstimatedHours = "EstimatedHours";
-        public const string LoggedHours = "LoggedHours";
-        public const string Status = "Status";
-        public const string ProjectId = "ProjectId";
-        public const string CollaboratorId = "CollaboratorId";
-    }
     public static class Rules
     {
         public const int TITLE_MAX_LENGTH = 255;

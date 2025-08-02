@@ -16,7 +16,7 @@ public class ProjectUsersConfiguration : EntityTypeBaseConfiguration<ProjectUser
                     projectId => projectId.Value,
                     value => ProjectId.Create(value)
                )
-               .HasColumnName(ProjectUser.ColumnNames.ProjectId)
+               .HasColumnName(nameof(ProjectId))
                .ValueGeneratedNever();
 
         builder.Property(x => x.UserId)
@@ -24,7 +24,7 @@ public class ProjectUsersConfiguration : EntityTypeBaseConfiguration<ProjectUser
                     userId => userId.Value,
                     value => UserId.Create(value)
                )
-               .HasColumnName(ProjectUser.ColumnNames.UserId)
+               .HasColumnName(nameof(UserId))
                .ValueGeneratedNever();
         //builder.ComplexProperty(x => x.Id, idBuilder =>
         //{

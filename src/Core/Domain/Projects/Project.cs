@@ -6,19 +6,10 @@ using Core.Domain.Projects.Entities;
 using Core.Domain.Projects.ValueObjects;
 using Core.Domain.Users;
 using Core.Domain.Users.ValueObjects;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Core.Domain.Projects;
 public sealed class Project : AggregateRoot<ProjectId>
 {
-    public static class ColumnNames
-    {
-        public const string Id = "Id";
-        public const string Name = "Name";
-        public const string StartDate = "StartDate";
-        public const string EndDate = "EndDate";
-        public const string Status = "Status";
-    }
     public static class Rules 
     {
         public const int NAME_MAX_LENGTH = 255;
@@ -30,9 +21,12 @@ public sealed class Project : AggregateRoot<ProjectId>
     public string Name { get; private set; } = default!;
     public DateRange ProjectPeriod { get; private set; } = default!;
     public ProjectStatus Status { get; private set; } = default!;
-    public List<Assignment> Assignments { get; private set; } = [];
-    public List<User> Users { get; private set; } = [];
-    public List<ProjectUser> ProjectUsers { get; set; } = [];
+    private readonly List<Assignment> _assignments = [];
+    public IReadOnlyList<Assignment> Assignments => _assignments;
+    private readonly List<User> _users = [];
+    public IReadOnlyList<User> Users => _users;
+    private readonly List<ProjectUser> _projectUsers = [];
+    public IReadOnlyList<ProjectUser> ProjectUsers => _projectUsers;
 
     public static DomainResult<Project> Create(
         string name,
@@ -67,7 +61,7 @@ public sealed class Project : AggregateRoot<ProjectId>
         return DomainResult<Project>.Success(project);
     }
 
-    public DomainResult<Project> AddAssignment(
+    public DomainResult AddAssignment(
         string title,
         decimal? estimatedHours,
         AssignmentStatus.AssignmentStatusEnum status,
@@ -75,12 +69,12 @@ public sealed class Project : AggregateRoot<ProjectId>
         UserId? userId
     )
     {
-        List<string> errors = [];   
-
         if (Status.IsCompleted())
         {
-            return DomainResult<Project>.Failure([DomainErrors.ProjectErrors.INVALID_ASSIGNMENT_PROJECT_COMPLETED]);
+            return DomainResult.Failure([DomainErrors.ProjectErrors.INVALID_ASSIGNMENT_PROJECT_COMPLETED]);
         }
+
+        List<string> errors = [];   
 
         DomainResult<Assignment> assignmentResult = Assignment.Create(
             Id,
@@ -94,12 +88,12 @@ public sealed class Project : AggregateRoot<ProjectId>
         
         if (errors.Count > 0)
         {
-            return DomainResult<Project>.Failure(errors);
+            return DomainResult.Failure(errors);
         }
 
-        Assignments.Add(assignmentResult.Value);
+        _assignments.Add(assignmentResult.Value);
 
-        return DomainResult<Project>.Success(this);
+        return DomainResult.Success();
     }
 
     private static DomainResult Validate(string name)

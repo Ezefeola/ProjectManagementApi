@@ -66,7 +66,7 @@ public class CreateAssignment : ICreateAssignment
             }
         }
 
-        DomainResult<Project> addAssignmentResult = project.AddAssignment(
+        DomainResult addAssignmentResult = project.AddAssignment(
             requestDto.Title,
             requestDto.EstimatedHours,
             requestDto.Status,

@@ -8,15 +8,6 @@ using Core.Domain.Users.ValueObjects;
 namespace Core.Domain.Users;
 public sealed class User : Entity<UserId>
 {
-    public static class ColumnNames
-    {
-        public const string Id = "Id";
-        public const string FirstName = "FirstName";
-        public const string LastName = "LastName";
-        public const string Email = "Email";
-        public const string Password = "Password";
-        public const string UserRole = "UserRole";
-    }
     public static class Rules
     {
         public const int FIRST_NAME_MAX_LENGTH = 100;
@@ -43,7 +34,7 @@ public sealed class User : Entity<UserId>
     public FullName FullName { get; private set; } = default!;
     public EmailAddress EmailAddress { get; private set; } = default!;
     public string Password { get; private set; } = default!;
-    public UserRole UserRole { get; private set; } = default!;
+    public UserRole Role { get; private set; } = default!;
     public List<ProjectUser> ProjectUsers { get; set; } = [];
     public List<Assignment> Assignments { get; set; } = [];
 
@@ -76,7 +67,7 @@ public sealed class User : Entity<UserId>
             Id = UserId.NewId(),
             EmailAddress = emailAddressResult.Value,
             FullName = fullNameResult.Value,
-            UserRole = userRoleResult.Value,
+            Role = userRoleResult.Value,
         };
 
         return DomainResult<User>.Success(user)
@@ -162,7 +153,7 @@ public sealed class User : Entity<UserId>
 
     public DomainResult<User> UpdateUserRole(UserRole.UserRolesEnum? userRole)
     {
-        DomainResult<UserRole> userRoleResult = UserRole.UpdateIfChanged(userRole);
+        DomainResult<UserRole> userRoleResult = Role.UpdateIfChanged(userRole);
         if (!userRoleResult.IsSuccess)
         {
             return DomainResult<User>.Failure(userRoleResult.Errors);
