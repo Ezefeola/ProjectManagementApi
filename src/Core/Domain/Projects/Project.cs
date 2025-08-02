@@ -6,6 +6,7 @@ using Core.Domain.Projects.Entities;
 using Core.Domain.Projects.ValueObjects;
 using Core.Domain.Users;
 using Core.Domain.Users.ValueObjects;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Core.Domain.Projects;
 public sealed class Project : AggregateRoot<ProjectId>
@@ -42,8 +43,8 @@ public sealed class Project : AggregateRoot<ProjectId>
     {
         List<string> errors = [];
 
-        if (string.IsNullOrWhiteSpace(name)) errors.Add(DomainErrors.ProjectErrors.NAME_NOT_EMPTY);
-        if (name.Length > Rules.NAME_MAX_LENGTH) errors.Add(DomainErrors.ProjectErrors.NAME_TOO_LONG);
+        DomainResult validationResult = Validate(name);
+        if(!validationResult.IsSuccess) errors.AddRange(validationResult.Errors);
 
         DomainResult<ProjectStatus> projectStatusResult = ProjectStatus.Create(status); 
         if(!projectStatusResult.IsSuccess) errors.AddRange(projectStatusResult.Errors);
@@ -99,5 +100,20 @@ public sealed class Project : AggregateRoot<ProjectId>
         Assignments.Add(assignmentResult.Value);
 
         return DomainResult<Project>.Success(this);
+    }
+
+    private static DomainResult Validate(string name)
+    {
+        List<string> errors = [];
+        
+        if (string.IsNullOrWhiteSpace(name)) errors.Add(DomainErrors.ProjectErrors.NAME_NOT_EMPTY);
+        if (name.Length > Rules.NAME_MAX_LENGTH) errors.Add(DomainErrors.ProjectErrors.NAME_TOO_LONG);
+
+        if (errors.Count > 0)
+        {
+            return DomainResult.Failure(errors);
+        }
+
+        return DomainResult.Success();
     }
 }
