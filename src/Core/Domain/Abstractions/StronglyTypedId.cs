@@ -1,6 +1,4 @@
-﻿using Core.Domain.Abstractions.ValueObjects;
-
-namespace Core.Domain.Abstractions.StronglyTypedIds;
+﻿namespace Core.Domain.Abstractions;
 public abstract record StronglyTypedId<TId> : ValueObject
     where TId : notnull
 {

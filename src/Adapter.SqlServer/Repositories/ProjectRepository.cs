@@ -22,6 +22,15 @@ public class ProjectRepository : GenericRepository<Project, ProjectId>, IProject
                      .ToListAsync(cancellationToken);
     }
 
+    public async Task<Project?> GetProjectWithAssignmentAsync(ProjectId projectId, AssignmentId assignmentId, CancellationToken cancellationToken)
+    {
+        return await Query()
+                     .Include(x => x.Assignments
+                        .Where(a => a.Id == assignmentId)
+                     )
+                     .FirstOrDefaultAsync(x => x.Id == projectId, cancellationToken);
+    }
+
     public async Task<int> CountAsync(CancellationToken cancellationToken)
     {
         return await Query()

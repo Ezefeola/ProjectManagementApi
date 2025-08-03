@@ -1,5 +1,4 @@
-﻿using Core.Domain.Abstractions.ValueObjects;
-using Core.Domain.Users;
+﻿using Core.Domain.Users;
 using Core.Domain.Users.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

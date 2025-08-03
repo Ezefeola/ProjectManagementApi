@@ -27,6 +27,7 @@ public static class DomainErrors
         public static readonly string TITLE_NOT_EMPTY = "The Title field cannot be empty.";
         public static readonly string TITLE_TOO_LONG = $"The Title field cannot exceed {Assignment.Rules.TITLE_MAX_LENGTH}.";
         public static readonly string DESCRIPTION_TOO_LONG = $"The Description field cannot exceed {Assignment.Rules.TITLE_MAX_LENGTH}.";
+        public static readonly string ASSIGNMENT_NOT_FOUND = $"Assignment not found.";
     }
 
     public static class ProjectErrors

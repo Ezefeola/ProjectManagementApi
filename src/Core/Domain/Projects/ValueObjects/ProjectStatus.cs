@@ -1,4 +1,4 @@
-﻿using Core.Domain.Abstractions.ValueObjects;
+﻿using Core.Domain.Abstractions;
 using Core.Domain.Common;
 using Core.Domain.Common.DomainResults;
 

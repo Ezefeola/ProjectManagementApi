@@ -9,4 +9,4 @@ public class AssignmentRepository : GenericRepository<Assignment, AssignmentId>,
     public AssignmentRepository(ApplicationDbContext context) : base(context)
     {
     }
-}
+} 

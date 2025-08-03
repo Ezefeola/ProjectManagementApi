@@ -1,6 +1,6 @@
 ﻿using Core.Contracts.DTOs.Projects.Request;
 using Core.Contracts.DTOs.Projects.Response;
-using Core.Contracts.Result;
+using Core.Contracts.Results;
 using Core.Contracts.UnitOfWork;
 using Core.Contracts.UseCases.Projects;
 using Core.Domain.Common.DomainResults;

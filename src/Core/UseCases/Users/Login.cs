@@ -1,7 +1,7 @@
 ﻿using Core.Contracts.Authentication;
 using Core.Contracts.DTOs.Auth.Request;
 using Core.Contracts.DTOs.Auth.Response;
-using Core.Contracts.Result;
+using Core.Contracts.Results;
 using Core.Contracts.UnitOfWork;
 using Core.Contracts.UseCases.Auth;
 using Core.Domain.Users;

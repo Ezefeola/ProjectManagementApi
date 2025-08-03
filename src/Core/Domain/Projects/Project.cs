@@ -4,7 +4,6 @@ using Core.Domain.Common.DomainResults;
 using Core.Domain.Common.ValueObjects;
 using Core.Domain.Projects.Entities;
 using Core.Domain.Projects.ValueObjects;
-using Core.Domain.Users;
 using Core.Domain.Users.ValueObjects;
 
 namespace Core.Domain.Projects;
@@ -85,6 +84,17 @@ public sealed class Project : AggregateRoot<ProjectId>
         _assignments.Add(assignmentResult.Value);
 
         return DomainResult.Success();
+    }
+
+    public void RemoveAssignment(AssignmentId assignmentId)
+    {
+        Assignment? assignment = _assignments.FirstOrDefault(a => a.Id == assignmentId);
+        if(assignment is null)
+        {
+            return;
+        }
+
+        assignment.SoftDelete();
     }
 
     private static DomainResult Validate(string name)

@@ -1,4 +1,4 @@
-﻿using Core.Domain.Abstractions.StronglyTypedIds;
+﻿using Core.Domain.Abstractions;
 
 namespace Core.Domain.Common.StronglyTypedIds;
 public abstract record StronglyTypedGuidId<TId> : StronglyTypedId<Guid>

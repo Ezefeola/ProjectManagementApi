@@ -8,7 +8,7 @@ public class ResultHttpCodeFilter : IEndpointFilter
     {
         var result = await next(context);
 
-        if (result is Core.Contracts.Result.IResult resultWithStatus)
+        if (result is Core.Contracts.Results.IResult resultWithStatus)
         {
             context.HttpContext.Response.StatusCode = (int)resultWithStatus.HttpStatusCode;
             return new JsonResult(resultWithStatus)

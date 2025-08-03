@@ -1,9 +1,7 @@
 ﻿using Adapter.Api.Endpoints.Abstractions;
 
-namespace Adapter.Api.Endpoints.Projects
+namespace Adapter.Api.Endpoints.Projects;
+public class ProjectEndpointsGroup : IEndpointGroup
 {
-    public class ProjectEndpointsGroup : IEndpointGroup
-    {
-        public static string GroupName => "project";
-    }
+    public static string GroupName => ApiRoutes.Projects.Project;
 }

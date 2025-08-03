@@ -36,6 +36,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<ICreateProject, CreateProject>()
                 .AddScoped<ICreateAssignment, CreateAssignment>()
+                .AddScoped<IDeleteAssignment, DeleteAssignment>()
                 .AddScoped<IGetProjects, GetProjects>();
     }
 }

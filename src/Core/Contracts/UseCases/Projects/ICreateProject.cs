@@ -1,6 +1,6 @@
 ﻿using Core.Contracts.DTOs.Projects.Request;
 using Core.Contracts.DTOs.Projects.Response;
-using Core.Contracts.Result;
+using Core.Contracts.Results;
 
 namespace Core.Contracts.UseCases.Projects
 {

@@ -1,7 +1,7 @@
 ﻿using Adapter.Api.Endpoints.Abstractions;
 using Core.Contracts.DTOs.Auth.Request;
 using Core.Contracts.DTOs.Auth.Response;
-using Core.Contracts.Result;
+using Core.Contracts.Results;
 using Core.Contracts.UseCases.Auth;
 using Microsoft.AspNetCore.Mvc;
 

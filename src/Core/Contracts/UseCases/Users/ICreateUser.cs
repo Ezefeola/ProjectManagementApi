@@ -1,6 +1,6 @@
 ﻿using Core.Contracts.DTOs.Users.Request;
 using Core.Contracts.DTOs.Users.Response;
-using Core.Contracts.Result;
+using Core.Contracts.Results;
 
 namespace Core.Contracts.UseCases.Users;
 public interface ICreateUser

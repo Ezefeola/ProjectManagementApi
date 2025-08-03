@@ -1,7 +1,7 @@
 ﻿using Core.Contracts.DTOs.Projects.Request;
 using Core.Contracts.DTOs.Projects.Response;
 using Core.Contracts.Models;
-using Core.Contracts.Result;
+using Core.Contracts.Results;
 using Core.Contracts.UnitOfWork;
 using Core.Contracts.UseCases.Projects;
 using Core.Domain.Common;
@@ -42,7 +42,6 @@ public class CreateAssignment : ICreateAssignment
         }
 
         ProjectId projectId = ProjectId.Create(requestDto.ProjectId);
-
         Project? project = await _unitOfWork.ProjectRepository.GetByIdAsync(
             projectId,
             cancellationToken

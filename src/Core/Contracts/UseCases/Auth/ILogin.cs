@@ -1,6 +1,6 @@
 ﻿using Core.Contracts.DTOs.Auth.Request;
 using Core.Contracts.DTOs.Auth.Response;
-using Core.Contracts.Result;
+using Core.Contracts.Results;
 
 namespace Core.Contracts.UseCases.Auth
 {

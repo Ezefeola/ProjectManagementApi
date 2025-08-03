@@ -20,7 +20,7 @@ public sealed record DateRange
         DateTime endDate
     )
     {
-        OperationResult validationResult = Validate(startDate, endDate);
+        DomainResult validationResult = Validate(startDate, endDate);
         if (!validationResult.IsSuccess)
         {
             return DomainResult<DateRange>.Failure([..validationResult.Errors]);
@@ -36,7 +36,7 @@ public sealed record DateRange
         DateTime updatedStartDate = newStartDate ?? StartDate;
         DateTime updatedEndDate = newEndDate ?? EndDate;
 
-        OperationResult validationResult = Validate(updatedStartDate, updatedEndDate);
+        DomainResult validationResult = Validate(updatedStartDate, updatedEndDate);
         if (!validationResult.IsSuccess)
         {
             return DomainResult<DateRange>.Failure([..validationResult.Errors]);
@@ -51,7 +51,7 @@ public sealed record DateRange
 
     }
 
-    private static OperationResult Validate(DateTime startDate, DateTime endDate)
+    private static DomainResult Validate(DateTime startDate, DateTime endDate)
     {
         List<string> errors = [];
 
@@ -59,9 +59,9 @@ public sealed record DateRange
 
         if(errors.Count > 0)
         {
-            return OperationResult.Failure(errors);
+            return DomainResult.Failure(errors);
         }
 
-        return OperationResult.Success();
+        return DomainResult.Success();
     }
 }
