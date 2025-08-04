@@ -10,11 +10,17 @@ public class GetProjectsEndpoint : IEndpoint<ProjectEndpointsGroup>
 {
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapGet("/", GetProjectsHandler);
+        return app.MapGet("/", GetProjectsHandler)
+                  .WithName("GetProjects")
+                  .Produces<Result<GetProjectsResponseDto>>(StatusCodes.Status200OK)
+                  .ProducesProblem(StatusCodes.Status404NotFound)
+                  .WithSummary("Get Projects")
+                  .WithDescription("Get Projects")
+                  .RequireAuthorization();
     }
 
     private static async Task<Result<GetProjectsResponseDto>> GetProjectsHandler(
-        [FromBody] GetProjectsRequestDto parametersRequestDto,
+        [AsParameters] GetProjectsRequestDto parametersRequestDto,
         [FromServices] IGetProjects useCase,
         CancellationToken cancellationToken
     )

@@ -10,7 +10,13 @@ public class GetProjectByIdEndpoint : IEndpoint<ProjectEndpointsGroup>
 {
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapGet("/{projectId:Guid}", GetProjectByIdHandler);
+        return app.MapGet("/{projectId:Guid}", GetProjectByIdHandler)
+                  .WithName("GetProjectById")
+                  .Produces<Result<GetProjectByIdResponseDto>>(StatusCodes.Status200OK)
+                  .ProducesProblem(StatusCodes.Status404NotFound)
+                  .WithSummary("Get Project By Id")
+                  .WithDescription("Get Project By Id")
+                  .RequireAuthorization();
     }
 
     private static async Task<Result<GetProjectByIdResponseDto>> GetProjectByIdHandler(

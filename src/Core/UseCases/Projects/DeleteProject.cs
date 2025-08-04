@@ -1,4 +1,5 @@
-﻿using Core.Contracts.Results;
+﻿using Core.Contracts.Models;
+using Core.Contracts.Results;
 using Core.Contracts.UnitOfWork;
 using Core.Contracts.UseCases.Projects;
 using Core.Domain.Common;
@@ -27,7 +28,12 @@ public class DeleteProject : IDeleteProject
 
         project.SoftDelete();
 
-        await _unitOfWork.CompleteAsync(cancellationToken);
+        SaveResult saveResult = await _unitOfWork.CompleteAsync(cancellationToken);
+        if(!saveResult.IsSuccess)
+        {
+            return Result.Failure(HttpStatusCode.BadRequest)
+                         .WithErrors([saveResult.ErrorMessage]);
+        }
 
         return Result.Success(HttpStatusCode.NoContent);
     }

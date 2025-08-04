@@ -1,7 +1,6 @@
 ﻿using Adapter.Api.Endpoints.Abstractions;
 using Core.Contracts.DTOs.Projects.Request;
 using Core.Contracts.DTOs.Projects.Response;
-using Core.Contracts.DTOs.Users.Response;
 using Core.Contracts.Results;
 using Core.Contracts.UseCases.Projects;
 using Microsoft.AspNetCore.Mvc;

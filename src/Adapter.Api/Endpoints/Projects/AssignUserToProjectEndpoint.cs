@@ -10,7 +10,14 @@ public class AssignUserToProjectEndpoint : IEndpoint<ProjectEndpointsGroup>
 {
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapPost("/{projectId:Guid}/users", AssignUserToProjectHandler);
+        return app.MapPost("/{projectId:Guid}/users", AssignUserToProjectHandler)
+                  .WithName("AssignUserToProject")
+                  .Produces<Result>(StatusCodes.Status204NoContent)
+                  .ProducesProblem(StatusCodes.Status400BadRequest)
+                  .ProducesProblem(StatusCodes.Status404NotFound)
+                  .WithSummary("Assign User To Project")
+                  .WithDescription("Assign User To Project")
+                  .RequireAuthorization();
     }
 
     private static async Task<Result> AssignUserToProjectHandler(

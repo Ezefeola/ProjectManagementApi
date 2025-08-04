@@ -11,7 +11,14 @@ namespace Adapter.Api.Endpoints.Projects
     {
         public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
         {
-            return app.MapPatch("/{projectId:Guid}", UpdateProjectDetailsHandler);
+            return app.MapPatch("/{projectId:Guid}", UpdateProjectDetailsHandler)
+                      .WithName("UpdateProjectDetails")
+                      .Produces<Result>(StatusCodes.Status200OK)
+                      .ProducesProblem(StatusCodes.Status400BadRequest)
+                      .ProducesProblem(StatusCodes.Status404NotFound)
+                      .WithSummary("Update Project Details")
+                      .WithDescription("Update Project Details")
+                      .RequireAuthorization();
         }
 
         private static async Task<Result> UpdateProjectDetailsHandler(

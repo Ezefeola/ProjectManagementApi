@@ -3,6 +3,7 @@ using Core.Contracts.DTOs.Projects.Request;
 using Core.Contracts.Repositories;
 using Core.Domain.Projects;
 using Core.Domain.Projects.ValueObjects;
+using Core.Domain.Users.ValueObjects;
 using Core.Utilities.QueryOptions;
 using Core.Utilities.QueryOptions.Pagination;
 using Microsoft.EntityFrameworkCore;
@@ -51,8 +52,19 @@ public class ProjectRepository : GenericRepository<Project, ProjectId>, IProject
     public async Task<Project?> GetProjectWithProjectUsersAsync(ProjectId id, CancellationToken cancellationToken)
     {
         return await Query()
+                     .Where(x => x.Id == id)
                      .Include(p => p.ProjectUsers)
-                     .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+                     .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<Project?> GetProjectWithProjectUserAsync(ProjectId projectId, UserId userId, CancellationToken cancellationToken)
+    {
+        return await Query()
+                     .Where(x => x.Id == projectId)
+                     .Include(x => x.ProjectUsers
+                        .Where(x => x.UserId == userId)
+                     )
+                     .FirstOrDefaultAsync(cancellationToken); 
     }
 
     public async Task<int> CountAsync(CancellationToken cancellationToken)

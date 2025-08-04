@@ -17,7 +17,7 @@ public class CreateAssignmentEndpoint : IEndpoint<ProjectEndpointsGroup>
                   .ProducesProblem(StatusCodes.Status400BadRequest)
                   .WithSummary("Create Assignment")
                   .WithDescription("Create Assignment")
-                  .RequireAuthorization(); ;
+                  .RequireAuthorization();
     }
 
     private static async Task<Result<CreateAssignmentResponseDto>> CreateAssignmentHandler(

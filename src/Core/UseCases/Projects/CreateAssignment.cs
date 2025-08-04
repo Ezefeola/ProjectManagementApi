@@ -63,6 +63,13 @@ public class CreateAssignment : ICreateAssignment
                 return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.NotFound)
                                                           .WithErrors([DomainErrors.UserErrors.USER_NOT_FOUND]);
             }
+
+            bool isUserAssigned = await _unitOfWork.ProjectUserRepository.IsUserAssignedToProjectAsync(projectId, userId, cancellationToken);
+            if (!isUserAssigned) 
+            {
+                return Result<CreateAssignmentResponseDto>.Failure(HttpStatusCode.BadRequest)
+                                                          .WithErrors([DomainErrors.AssignmentErrors.INVALID_USER_ASSIGNMENT]);
+            }
         }
 
         DomainResult addAssignmentResult = project.AddAssignment(

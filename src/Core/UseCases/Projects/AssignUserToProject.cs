@@ -27,7 +27,7 @@ public class AssignUserToProject : IAssignUserToProject
     {
         UserId userId = UserId.Create(requestDto.UserId);
 
-        Project? project = await _unitOfWork.ProjectRepository.GetProjectWithProjectUsersAsync(projectId, cancellationToken);
+        Project? project = await _unitOfWork.ProjectRepository.GetByIdAsync(projectId, cancellationToken);
         if (project is null)
         {
             return Result.Failure(HttpStatusCode.NotFound)
@@ -41,7 +41,8 @@ public class AssignUserToProject : IAssignUserToProject
                          .WithErrors([DomainErrors.UserErrors.USER_DOES_NOT_EXIST]);
         }
 
-        DomainResult assignUserToProjectResult = project.AssignUser(userId, requestDto.Role);
+        bool isUserAssigned = await _unitOfWork.ProjectUserRepository.IsUserAssignedToProjectAsync(projectId, userId, cancellationToken);
+        DomainResult assignUserToProjectResult = project.AssignUser(userId, requestDto.Role, isUserAssigned);
         if (!assignUserToProjectResult.IsSuccess)
         {
             return Result.Failure(HttpStatusCode.BadRequest)

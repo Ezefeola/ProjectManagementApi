@@ -90,15 +90,18 @@ public sealed class Project : AggregateRoot<ProjectId>
         return DomainResult.Success();
     }
 
-    public DomainResult AssignUser(UserId userId, ProjectUser.ProjectUserRoleEnum role)
+    public DomainResult AssignUser(
+        UserId userId, 
+        ProjectUser.ProjectUserRoleEnum role, 
+        bool isUserAssigned
+    )
     {
-        if(_projectUsers.Any(x => x.UserId == userId && x.IsDeleted == false))
+        if(isUserAssigned)
         {
             return DomainResult.Failure([DomainErrors.ProjectErrors.USER_ALREADY_ASSIGNED]);
         }
 
         ProjectUser projectUser = ProjectUser.Create(Id, userId, role);
-
         _projectUsers.Add(projectUser);
         MarkAsUpdated();
 
@@ -116,6 +119,18 @@ public sealed class Project : AggregateRoot<ProjectId>
         assignment.SoftDelete();
     }
 
+    public DomainResult RemoveUser(UserId userId)
+    {
+        ProjectUser? projectUser = _projectUsers.FirstOrDefault(x => x.UserId == userId);
+        if (projectUser is null)
+        {
+            return DomainResult.Failure([DomainErrors.ProjectErrors.USER_NOT_ASSIGNED]);
+        }
+
+        projectUser.SoftDelete();
+
+        return DomainResult.Success();
+    }
 
     public DomainResult UpdateDetails(
         string? name, 
