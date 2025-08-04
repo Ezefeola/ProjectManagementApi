@@ -48,6 +48,13 @@ public class ProjectRepository : GenericRepository<Project, ProjectId>, IProject
                      .FirstOrDefaultAsync(x => x.Id == projectId, cancellationToken);
     }
 
+    public async Task<Project?> GetProjectWithProjectUsersAsync(ProjectId id, CancellationToken cancellationToken)
+    {
+        return await Query()
+                     .Include(p => p.ProjectUsers)
+                     .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+    }
+
     public async Task<int> CountAsync(CancellationToken cancellationToken)
     {
         return await Query()

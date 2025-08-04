@@ -19,6 +19,7 @@ public static class DomainErrors
 
         public static readonly string USER_NOT_FOUND = $"User not found.";
         public static readonly string USER_ALREADY_EXISTS = "User already exists.";
+        public static readonly string USER_DOES_NOT_EXIST = "User does not exists.";
     }
 
     public static class AssignmentErrors
@@ -40,5 +41,6 @@ public static class DomainErrors
         public static readonly string INVALID_STATUS = "Invalid status assignment, please assign a correct one.";
         public static readonly string INVALID_ASSIGNMENT_PROJECT_COMPLETED = "Cannot add an assignment to a completed project.";
         public static readonly string PROJECT_NOT_FOUND = "Project not found.";
+        public static readonly string USER_ALREADY_ASSIGNED = "User already assigned to the project.";
     }   
 }

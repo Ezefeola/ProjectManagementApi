@@ -10,4 +10,5 @@ public interface IProjectRepository : IGenericRepository<Project, ProjectId>
     Task<Project?> GetByIdWithAllChildrenAsync(ProjectId projectId, CancellationToken cancellationToken);
     Task<Project?> GetByIdWithAssignmentAsync(ProjectId projectId, AssignmentId assignmentId, CancellationToken cancellationToken);
     Task<Project?> GetByIdWithAssignmentsAsync(ProjectId projectId, CancellationToken cancellationToken);
+    Task<Project?> GetProjectWithProjectUsersAsync(ProjectId id, CancellationToken cancellationToken);
 }

@@ -35,7 +35,8 @@ public sealed class User : Entity<UserId>
     public EmailAddress EmailAddress { get; private set; } = default!;
     public string Password { get; private set; } = default!;
     public UserRole Role { get; private set; } = default!;
-    public List<ProjectUser> ProjectUsers { get; set; } = [];
+    private readonly List<ProjectUser> _projectUsers = [];
+    public IReadOnlyList<ProjectUser> ProjectUsers => _projectUsers;
 
     public static DomainResult<User> Create(
         string firstName,

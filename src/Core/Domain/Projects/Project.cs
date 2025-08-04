@@ -90,6 +90,21 @@ public sealed class Project : AggregateRoot<ProjectId>
         return DomainResult.Success();
     }
 
+    public DomainResult AssignUser(UserId userId, ProjectUser.ProjectUserRoleEnum role)
+    {
+        if(_projectUsers.Any(x => x.UserId == userId && x.IsDeleted == false))
+        {
+            return DomainResult.Failure([DomainErrors.ProjectErrors.USER_ALREADY_ASSIGNED]);
+        }
+
+        ProjectUser projectUser = ProjectUser.Create(Id, userId, role);
+
+        _projectUsers.Add(projectUser);
+        MarkAsUpdated();
+
+        return DomainResult.Success();
+    }
+
     public void RemoveAssignment(AssignmentId assignmentId)
     {
         Assignment? assignment = _assignments.FirstOrDefault(a => a.Id == assignmentId);
