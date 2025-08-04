@@ -25,6 +25,11 @@ public class ProjectConfiguration : EntityTypeBaseConfiguration<Project>
                .HasMaxLength(Project.Rules.NAME_MAX_LENGTH)
                .HasColumnName(nameof(Project.Name));
 
+        builder.Property(x => x.Description)
+               .IsRequired(false)
+               .HasMaxLength(Project.Rules.DESCRIPTION_MAX_LENGTH)
+               .HasColumnName(nameof(Project.Description));
+
         builder.ComplexProperty(x => x.ProjectPeriod, periodBuilder =>
         {
             periodBuilder.Property(x => x.StartDate)

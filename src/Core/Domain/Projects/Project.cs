@@ -12,12 +12,14 @@ public sealed class Project : AggregateRoot<ProjectId>
     public static class Rules 
     {
         public const int NAME_MAX_LENGTH = 255;
+        public const int DESCRIPTION_MAX_LENGTH = 1000;
         public const int STATUS_MAX_LENGTH = 255;
     }
 
     private Project() { }
 
     public string Name { get; private set; } = default!;
+    public string? Description { get; private set; }
     public DateRange ProjectPeriod { get; private set; } = default!;
     public ProjectStatus Status { get; private set; } = default!;
     private readonly List<Assignment> _assignments = [];
@@ -27,6 +29,7 @@ public sealed class Project : AggregateRoot<ProjectId>
 
     public static DomainResult<Project> Create(
         string name,
+        string? description,
         DateTime startDate,
         DateTime endDate,
         ProjectStatus.ProjectStatusEnum status
@@ -52,6 +55,7 @@ public sealed class Project : AggregateRoot<ProjectId>
         {
             Id = ProjectId.NewId(),
             Name = name,
+            Description = description,
             ProjectPeriod = dateRangeResult.Value,
             Status = projectStatusResult.Value
         };
@@ -95,6 +99,98 @@ public sealed class Project : AggregateRoot<ProjectId>
         }
 
         assignment.SoftDelete();
+    }
+
+
+    public DomainResult UpdateDetails(
+        string? name, 
+        string? description, 
+        DateTime? startDate, 
+        DateTime? endDate
+    )
+    {
+        List<string> errors = [];
+
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            DomainResult changeNameResult = ChangeName(name);
+            if(!changeNameResult.IsSuccess) errors.AddRange(changeNameResult.Errors);
+        }
+        if(!string.IsNullOrWhiteSpace(description))
+        {
+            DomainResult changeDescriptionResult = ChangeDescription(description);
+            if(!changeDescriptionResult.IsSuccess) errors.AddRange(changeDescriptionResult.Errors);
+        }
+        if(startDate.HasValue || endDate.HasValue)
+        {
+            DomainResult changeProjectPeriodResult = ChangeProjectPeriod(startDate, endDate);
+            if(!changeProjectPeriodResult.IsSuccess) errors.AddRange(changeProjectPeriodResult.Errors);
+        }
+
+        if(errors.Count > 0)
+        {
+            return DomainResult.Failure(errors);
+        }
+
+        return DomainResult.Success();
+    }
+    public DomainResult ChangeName(string? name)
+    {
+        if(string.IsNullOrWhiteSpace(name))
+        {
+            return DomainResult.Success()
+                               .WithDescription("No changes made to project name.");
+        }
+
+        if(name.Length > Rules.NAME_MAX_LENGTH)
+        {
+            return DomainResult.Failure([DomainErrors.ProjectErrors.NAME_TOO_LONG]);
+        }   
+        
+        if(Name != name)
+        {
+            Name = name;
+            MarkAsUpdated();
+        }
+        return DomainResult.Success()
+                           .WithDescription("Project name changed successfully.");
+    }
+    public DomainResult ChangeDescription(string? description)
+    {
+        if(Description != description)
+        {
+            Description = description;
+            MarkAsUpdated();   
+        }
+        return DomainResult.Success()
+                           .WithDescription("Project description changed successfully.");
+    }
+    public DomainResult ChangeProjectPeriod(DateTime? startDate, DateTime? endDate)
+    {
+        DomainResult updateProjectPeriodResult = ProjectPeriod.Update(startDate, endDate);
+        if (!updateProjectPeriodResult.IsSuccess)
+        {
+            return DomainResult.Failure(updateProjectPeriodResult.Errors);
+        }
+
+        MarkAsUpdated();
+        return DomainResult.Success()
+                           .WithDescription("Project period changed successfully.");
+    }
+
+    public override void SoftDelete()
+    {
+        base.SoftDelete();
+
+        foreach (Assignment assignment in _assignments)
+        {
+            assignment.SoftDelete();
+        }
+
+        foreach (ProjectUser projectUser in _projectUsers)
+        {
+            projectUser.SoftDelete();
+        }
     }
 
     private static DomainResult Validate(string name)

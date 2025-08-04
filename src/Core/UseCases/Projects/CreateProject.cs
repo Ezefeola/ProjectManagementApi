@@ -39,6 +39,7 @@ public class CreateProject : ICreateProject
 
         DomainResult<Project> projectResult = Project.Create(
             requestDto.Name,
+            requestDto.Description,
             requestDto.StartDate,
             requestDto.EndDate,
             requestDto.Status

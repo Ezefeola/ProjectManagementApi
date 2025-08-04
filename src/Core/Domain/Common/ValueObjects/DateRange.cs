@@ -31,7 +31,7 @@ public sealed record DateRange
                                       .WithDescription("DateRange created.");
     }
 
-    public DomainResult<DateRange> Update(DateTime? newStartDate, DateTime? newEndDate)
+    public DomainResult Update(DateTime? newStartDate, DateTime? newEndDate)
     {
         DateTime updatedStartDate = newStartDate ?? StartDate;
         DateTime updatedEndDate = newEndDate ?? EndDate;
@@ -39,15 +39,10 @@ public sealed record DateRange
         DomainResult validationResult = Validate(updatedStartDate, updatedEndDate);
         if (!validationResult.IsSuccess)
         {
-            return DomainResult<DateRange>.Failure([..validationResult.Errors]);
+            return DomainResult.Failure([..validationResult.Errors]);
         }
 
-        int updatedCount = 0;
-        if (!StartDate.Equals(updatedStartDate)) updatedCount++;
-        if (!EndDate.Equals(updatedEndDate)) updatedCount++;
-
-        return DomainResult<DateRange>.Success(this)
-                                      .WithUpdatedFieldCount(updatedCount);
+        return DomainResult.Success();
 
     }
 

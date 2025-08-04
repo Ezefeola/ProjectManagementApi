@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Adapter.SqlServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250802215428_Initial")]
+    [Migration("20250803225125_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -142,6 +142,11 @@ namespace Adapter.SqlServer.Migrations
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("Description");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");

@@ -5,24 +5,21 @@ using Core.Domain.Projects.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Adapter.Api.Endpoints.Projects;
-public class DeleteAssignmentEndpoint : IEndpoint<ProjectEndpointsGroup>
+public class DeleteProjectEndpoint : IEndpoint<ProjectEndpointsGroup>
 {
-    private readonly string route = "{projectId:Guid}"+$"/+{ApiRoutes.Projects.Assignments}"+"/{assignmentId:Guid}";
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapDelete(route, DeleteAssignmentHandler);
+        return app.MapDelete("/{projectId:Guid}", DeleteProjectHandler);
     }
 
-    private static async Task<Result> DeleteAssignmentHandler(
+    private static async Task<Result> DeleteProjectHandler(
         [FromRoute] Guid projectId,
-        [FromRoute] Guid assignmentId,
-        [FromServices] IDeleteAssignment useCase,
+        [FromServices] IDeleteProject useCase,
         CancellationToken cancellationToken
     )
     {
         Result response = await useCase.ExecuteAsync(
             ProjectId.Create(projectId),
-            AssignmentId.Create(assignmentId), 
             cancellationToken
         );
         return response;

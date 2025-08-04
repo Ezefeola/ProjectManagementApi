@@ -50,4 +50,12 @@ public static class ProjectMappers
             Items = [.. projects.Select(x => x.ToProjectResponseDto())]
         };
     }
+
+    public static GetProjectByIdResponseDto ToGetProjectByIdResponseDto(this Project project)
+    {
+        return new GetProjectByIdResponseDto()
+        {
+            ProjectResponseDto = project.ToProjectResponseDto()
+        };
+    }
 }

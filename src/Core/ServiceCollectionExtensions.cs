@@ -34,9 +34,12 @@ public static class ServiceCollectionExtensions
     }
     private static void AddProjectUseCases(this IServiceCollection services)
     {
-        services.AddScoped<ICreateProject, CreateProject>()
+        services.AddScoped<IGetProjects, GetProjects>()
+                .AddScoped<IGetProjectById, GetProjectById>()
+                .AddScoped<ICreateProject, CreateProject>()
+                .AddScoped<IUpdateProjectDetails, UpdateProjectDetails>()
+                .AddScoped<IDeleteProject, DeleteProject>()
                 .AddScoped<ICreateAssignment, CreateAssignment>()
-                .AddScoped<IDeleteAssignment, DeleteAssignment>()
-                .AddScoped<IGetProjects, GetProjects>();
+                .AddScoped<IDeleteAssignment, DeleteAssignment>();
     }
 }

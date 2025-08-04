@@ -13,7 +13,7 @@ public abstract class Entity : IEntity
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public void SoftDelete()
+    public virtual void SoftDelete()
     {
         IsDeleted = true;
         DeletedAt = DateTime.UtcNow;

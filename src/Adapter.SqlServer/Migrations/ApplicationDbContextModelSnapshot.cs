@@ -140,6 +140,11 @@ namespace Adapter.SqlServer.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("Description");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 

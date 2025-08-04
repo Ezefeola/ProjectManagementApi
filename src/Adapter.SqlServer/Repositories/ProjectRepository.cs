@@ -22,7 +22,24 @@ public class ProjectRepository : GenericRepository<Project, ProjectId>, IProject
                      .ToListAsync(cancellationToken);
     }
 
-    public async Task<Project?> GetProjectWithAssignmentAsync(ProjectId projectId, AssignmentId assignmentId, CancellationToken cancellationToken)
+    public async Task<Project?> GetByIdWithAllChildrenAsync(ProjectId projectId, CancellationToken cancellationToken)
+    {
+        return await Query()
+                     .Where(x => x.Id == projectId)
+                     .Include(x => x.Assignments)
+                     .Include(x => x.ProjectUsers)
+                     .AsSplitQuery()
+                     .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<Project?> GetByIdWithAssignmentsAsync(ProjectId projectId, CancellationToken cancellationToken)
+    {
+        return await Query()
+                     .Include(x => x.Assignments)
+                     .FirstOrDefaultAsync(x => x.Id == projectId, cancellationToken);
+    }
+
+    public async Task<Project?> GetByIdWithAssignmentAsync(ProjectId projectId, AssignmentId assignmentId, CancellationToken cancellationToken)
     {
         return await Query()
                      .Include(x => x.Assignments

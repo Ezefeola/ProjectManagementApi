@@ -1,5 +1,4 @@
-﻿using Core.Contracts.DTOs.Assignment.Request;
-using Core.Contracts.Models;
+﻿using Core.Contracts.Models;
 using Core.Contracts.Results;
 using Core.Contracts.UnitOfWork;
 using Core.Contracts.UseCases.Projects;
@@ -20,7 +19,7 @@ public class DeleteAssignment : IDeleteAssignment
 
     public async Task<Result> ExecuteAsync(ProjectId projectId, AssignmentId assignmentId, CancellationToken cancellationToken)
     {
-        Project? project = await _unitOfWork.ProjectRepository.GetProjectWithAssignmentAsync(
+        Project? project = await _unitOfWork.ProjectRepository.GetByIdWithAssignmentAsync(
             projectId,
             assignmentId,
             cancellationToken
