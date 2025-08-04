@@ -1,6 +1,6 @@
 ﻿using Core.Domain.Projects.ValueObjects;
 
-namespace Core.Contracts.DTOs.Projects.Request;
+namespace Core.Contracts.DTOs.Assignment.Request;
 public sealed record CreateAssignmentRequestDto
 {
     public Guid ProjectId { get; set; }

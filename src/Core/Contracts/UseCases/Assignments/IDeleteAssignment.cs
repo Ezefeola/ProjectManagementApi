@@ -1,7 +1,7 @@
 ﻿using Core.Contracts.Results;
 using Core.Domain.Projects.ValueObjects;
 
-namespace Core.Contracts.UseCases.Projects
+namespace Core.Contracts.UseCases.Assignments
 {
     public interface IDeleteAssignment
     {

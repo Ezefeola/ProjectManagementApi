@@ -108,6 +108,28 @@ public sealed class Project : AggregateRoot<ProjectId>
         return DomainResult.Success();
     }
 
+    public DomainResult UpdateAssignmentDetails(
+        AssignmentId assignmentId,
+        string? title, 
+        string? description, 
+        decimal? estimatedHours
+    )
+    {
+        Assignment? assignment = _assignments.FirstOrDefault(x => x.Id == assignmentId);
+        if(assignment is null)
+        {
+            return DomainResult.Failure([DomainErrors.AssignmentErrors.ASSIGNMENT_NOT_FOUND]);
+        }
+
+        bool isUpdated = assignment.UpdateDetails(title, description, estimatedHours);
+        if(isUpdated)
+        {
+            MarkAsUpdated();
+        }
+
+        return DomainResult.Success();
+    }
+
     public void RemoveAssignment(AssignmentId assignmentId)
     {
         Assignment? assignment = _assignments.FirstOrDefault(a => a.Id == assignmentId);

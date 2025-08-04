@@ -1,9 +1,9 @@
-﻿using Core.Contracts.DTOs.Projects.Request;
-using Core.Contracts.DTOs.Projects.Response;
+﻿using Core.Contracts.DTOs.Assignment.Request;
+using Core.Contracts.DTOs.Assignment.Response;
 using Core.Contracts.Models;
 using Core.Contracts.Results;
 using Core.Contracts.UnitOfWork;
-using Core.Contracts.UseCases.Projects;
+using Core.Contracts.UseCases.Assignments;
 using Core.Domain.Common;
 using Core.Domain.Common.DomainResults;
 using Core.Domain.Projects;
@@ -14,7 +14,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using System.Net;
 
-namespace Core.UseCases.Projects;
+namespace Core.UseCases.Assignments;
 public class CreateAssignment : ICreateAssignment
 {
     private readonly IUnitOfWork _unitOfWork;

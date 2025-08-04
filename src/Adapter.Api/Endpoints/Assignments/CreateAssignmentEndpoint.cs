@@ -1,12 +1,12 @@
 ﻿using Adapter.Api.Endpoints.Abstractions;
-using Core.Contracts.DTOs.Projects.Request;
-using Core.Contracts.DTOs.Projects.Response;
-using Core.Contracts.DTOs.Users.Response;
+using Adapter.Api.Endpoints.Projects;
+using Core.Contracts.DTOs.Assignment.Request;
+using Core.Contracts.DTOs.Assignment.Response;
 using Core.Contracts.Results;
-using Core.Contracts.UseCases.Projects;
+using Core.Contracts.UseCases.Assignments;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Adapter.Api.Endpoints.Projects;
+namespace Adapter.Api.Endpoints.Assignments;
 public class CreateAssignmentEndpoint : IEndpoint<ProjectEndpointsGroup>
 {
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)

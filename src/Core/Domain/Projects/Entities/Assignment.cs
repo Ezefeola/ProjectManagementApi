@@ -42,7 +42,7 @@ public sealed class Assignment : Entity<AssignmentId>
         if (string.IsNullOrWhiteSpace(title)) errors.Add(DomainErrors.AssignmentErrors.TITLE_NOT_EMPTY);
 
         DomainResult<AssignmentStatus> assignmentStatusResult = AssignmentStatus.Create(status);
-        if(!assignmentStatusResult.IsSuccess) errors.AddRange(assignmentStatusResult.Errors);
+        if (!assignmentStatusResult.IsSuccess) errors.AddRange(assignmentStatusResult.Errors);
 
         if (errors.Count > 0)
         {
@@ -60,5 +60,39 @@ public sealed class Assignment : Entity<AssignmentId>
             UserId = userId
         };
         return DomainResult<Assignment>.Success(assignment);
+    }
+
+    internal bool UpdateDetails(
+        string? title,
+        string? description,
+        decimal? estimatedHours
+    )
+    {
+        bool isUpdated = false;
+
+        if (!string.IsNullOrWhiteSpace(title) && Title != title)
+        {
+            Title = title;
+            isUpdated = true;
+        }
+
+        if (!string.IsNullOrWhiteSpace(description) && Description != description)
+        {
+            Description = description;
+            isUpdated = true;
+        }
+
+        if (estimatedHours is not null && EstimatedHours != estimatedHours)
+        {
+            EstimatedHours = estimatedHours;
+            isUpdated = true;
+        }
+
+        if (isUpdated)
+        {
+            MarkAsUpdated();
+        }
+
+        return isUpdated;
     }
 }

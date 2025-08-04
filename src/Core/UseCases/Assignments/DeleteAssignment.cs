@@ -1,13 +1,13 @@
 ﻿using Core.Contracts.Models;
 using Core.Contracts.Results;
 using Core.Contracts.UnitOfWork;
-using Core.Contracts.UseCases.Projects;
+using Core.Contracts.UseCases.Assignments;
 using Core.Domain.Common;
 using Core.Domain.Projects;
 using Core.Domain.Projects.ValueObjects;
 using System.Net;
 
-namespace Core.UseCases.Projects;
+namespace Core.UseCases.Assignments;
 public class DeleteAssignment : IDeleteAssignment
 {
     private readonly IUnitOfWork _unitOfWork;

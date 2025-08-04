@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
+using Core.Contracts.UseCases.Assignments;
 using Core.Contracts.UseCases.Auth;
 using Core.Contracts.UseCases.Projects;
 using Core.Contracts.UseCases.Users;
+using Core.UseCases.Assignments;
 using Core.UseCases.Projects;
 using Core.UseCases.Users;
 using FluentValidation;
@@ -26,6 +28,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddUserUseCases();
         services.AddProjectUseCases();
+        services.AddAssignmentUseCases();
     }
     private static void AddUserUseCases(this IServiceCollection services)
     {
@@ -41,8 +44,13 @@ public static class ServiceCollectionExtensions
                 .AddScoped<IDeleteProject, DeleteProject>()
                 .AddScoped<IGetUsersForProject, GetUsersForProject>()
                 .AddScoped<IAssignUserToProject, AssignUserToProject>()
-                .AddScoped<IRemoveUserFromProject, RemoveUserFromProject>()
-                .AddScoped<ICreateAssignment, CreateAssignment>()
+                .AddScoped<IRemoveUserFromProject, RemoveUserFromProject>();
+    }
+
+    private static void AddAssignmentUseCases(this IServiceCollection services)
+    {
+        services.AddScoped<ICreateAssignment, CreateAssignment>()
+                .AddScoped<IUpdateAssignmentDetails, UpdateAssignmentDetails>()
                 .AddScoped<IDeleteAssignment, DeleteAssignment>();
     }
 }

@@ -1,8 +1,8 @@
-﻿using Core.Contracts.DTOs.Projects.Request;
-using Core.Contracts.DTOs.Projects.Response;
+﻿using Core.Contracts.DTOs.Assignment.Request;
+using Core.Contracts.DTOs.Assignment.Response;
 using Core.Contracts.Results;
 
-namespace Core.Contracts.UseCases.Projects
+namespace Core.Contracts.UseCases.Assignments
 {
     public interface ICreateAssignment
     {

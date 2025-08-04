@@ -1,11 +1,12 @@
 ﻿using Adapter.Api.Endpoints.Abstractions;
+using Adapter.Api.Endpoints.Projects;
 using Core.Contracts.DTOs.Projects.Response;
 using Core.Contracts.Results;
-using Core.Contracts.UseCases.Projects;
+using Core.Contracts.UseCases.Assignments;
 using Core.Domain.Projects.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Adapter.Api.Endpoints.Projects;
+namespace Adapter.Api.Endpoints.Assignments;
 public class DeleteAssignmentEndpoint : IEndpoint<ProjectEndpointsGroup>
 {
     private readonly string route = "{projectId:Guid}"+$"/+{ApiRoutes.Projects.Assignments}"+"/{assignmentId:Guid}";

@@ -1,4 +1,4 @@
-﻿using Core.Contracts.DTOs.Projects.Request;
+﻿using Core.Contracts.DTOs.Assignment.Request;
 using Core.Domain.Common;
 using Core.Domain.Projects.Entities;
 using Core.Utilities.Validations;
