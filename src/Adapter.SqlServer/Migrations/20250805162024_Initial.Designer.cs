@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Adapter.SqlServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250804140150_Initial")]
+    [Migration("20250805162024_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -71,9 +71,6 @@ namespace Adapter.SqlServer.Migrations
                         .ValueGeneratedOnUpdate()
                         .HasColumnType("datetime");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.ComplexProperty<Dictionary<string, object>>("Status", "Core.Domain.Projects.Entities.Assignment.Status#AssignmentStatus", b1 =>
                         {
                             b1.IsRequired();
@@ -91,9 +88,40 @@ namespace Adapter.SqlServer.Migrations
 
                     b.HasIndex("ProjectId");
 
+                    b.ToTable("Assignment");
+                });
+
+            modelBuilder.Entity("Core.Domain.Projects.Entities.AssignmentUser", b =>
+                {
+                    b.Property<Guid>("AssignmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .ValueGeneratedOnUpdate()
+                        .HasColumnType("datetime");
+
+                    b.HasKey("AssignmentId", "UserId");
+
+                    b.HasIndex("IsDeleted")
+                        .HasFilter("IsDeleted = 0");
+
                     b.HasIndex("UserId");
 
-                    b.ToTable("Assignment");
+                    b.ToTable("AssignmentUser");
                 });
 
             modelBuilder.Entity("Core.Domain.Projects.Entities.ProjectUser", b =>
@@ -261,11 +289,24 @@ namespace Adapter.SqlServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Domain.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Core.Domain.Projects.Entities.AssignmentUser", b =>
+                {
+                    b.HasOne("Core.Domain.Projects.Entities.Assignment", "Assignment")
+                        .WithMany("AssignmentUsers")
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Domain.Users.User", "User")
+                        .WithMany("AssignmentUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assignment");
 
                     b.Navigation("User");
                 });
@@ -317,6 +358,11 @@ namespace Adapter.SqlServer.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Core.Domain.Projects.Entities.Assignment", b =>
+                {
+                    b.Navigation("AssignmentUsers");
+                });
+
             modelBuilder.Entity("Core.Domain.Projects.Project", b =>
                 {
                     b.Navigation("Assignments");
@@ -326,6 +372,8 @@ namespace Adapter.SqlServer.Migrations
 
             modelBuilder.Entity("Core.Domain.Users.User", b =>
                 {
+                    b.Navigation("AssignmentUsers");
+
                     b.Navigation("ProjectUsers");
                 });
 #pragma warning restore 612, 618

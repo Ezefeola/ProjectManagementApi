@@ -1,4 +1,4 @@
-﻿using Adapter.Api.Endpoints.Abstractions;
+﻿using MinimalApi.Endpoints.Organizer.Abstractions;
 using Core.Contracts.DTOs.Projects.Request;
 using Core.Contracts.DTOs.Projects.Response;
 using Core.Contracts.Results;
@@ -6,7 +6,7 @@ using Core.Contracts.UseCases.Projects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Adapter.Api.Endpoints.Projects;
-public class GetProjectsEndpoint : IEndpoint<ProjectEndpointsGroup>
+public class GetProjectsEndpoint : IEndpoint<ProjectEndpointsConfiguration>
 {
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {

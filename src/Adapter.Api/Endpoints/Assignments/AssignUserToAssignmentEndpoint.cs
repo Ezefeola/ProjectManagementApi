@@ -6,25 +6,25 @@ using Core.Domain.Projects.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Adapter.Api.Endpoints.Assignments;
-public class UpdateAssignmentDetailsEndpoint : IEndpoint<AssignmentEndpointsConfiguration>
+public class AssignUserToAssignmentEndpoint : IEndpoint<AssignmentEndpointsConfiguration>
 {
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapPatch("/{assignmentId:Guid}", UpdateAssignmentDetailsHandler)
-                  .WithName("UpdateAssignmentDetails")
-                  .Produces<Result>(StatusCodes.Status204NoContent)
+        return app.MapPost("/{assignmentId:Guid}" + $"/{ApiRoutes.Users}", AssignUserToAssignmentsHandler)
+                  .WithName("AssignUserToAssignment")
+                  .Produces<Result>(StatusCodes.Status200OK)
                   .ProducesProblem(StatusCodes.Status400BadRequest)
                   .ProducesProblem(StatusCodes.Status404NotFound)
-                  .WithSummary("Update Assignment Details")
-                  .WithDescription("Update Assignment Details")
+                  .WithSummary("Assign User To Assignment")
+                  .WithDescription("Assign User To Assignment")
                   .RequireAuthorization();
     }
 
-    private static async Task<Result> UpdateAssignmentDetailsHandler(
+    private static async Task<Result> AssignUserToAssignmentsHandler(
         [FromRoute] Guid projectId,
         [FromRoute] Guid assignmentId,
-        [FromBody] UpdateAssignmentDetailsRequestDto requestDto,
-        [FromServices] IUpdateAssignmentDetails useCase,
+        [FromBody] AssignUserToAssignmentRequestDto requestDto,
+        [FromServices] IAssignUserToAssignment useCase,
         CancellationToken cancellationToken
     )
     {

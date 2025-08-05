@@ -61,7 +61,6 @@ namespace Adapter.SqlServer.Migrations
                     EstimatedHours = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
                     LoggedHours = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
                     ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -77,11 +76,6 @@ namespace Adapter.SqlServer.Migrations
                         principalTable: "Project",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Assignment_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -113,6 +107,34 @@ namespace Adapter.SqlServer.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AssignmentUser",
+                columns: table => new
+                {
+                    AssignmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AssignmentUser", x => new { x.AssignmentId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_AssignmentUser_Assignment_AssignmentId",
+                        column: x => x.AssignmentId,
+                        principalTable: "Assignment",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AssignmentUser_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Assignment_IsDeleted",
                 table: "Assignment",
@@ -125,8 +147,14 @@ namespace Adapter.SqlServer.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Assignment_UserId",
-                table: "Assignment",
+                name: "IX_AssignmentUser_IsDeleted",
+                table: "AssignmentUser",
+                column: "IsDeleted",
+                filter: "IsDeleted = 0");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AssignmentUser_UserId",
+                table: "AssignmentUser",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -163,16 +191,19 @@ namespace Adapter.SqlServer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Assignment");
+                name: "AssignmentUser");
 
             migrationBuilder.DropTable(
                 name: "ProjectUser");
 
             migrationBuilder.DropTable(
-                name: "Project");
+                name: "Assignment");
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Project");
         }
     }
 }

@@ -25,8 +25,8 @@ public sealed class Assignment : Entity<AssignmentId>
     public AssignmentStatus Status { get; private set; } = default!;
     public ProjectId ProjectId { get; private set; } = default!;
     public Project Project { get; private set; } = default!;
-    public UserId? UserId { get; private set; }
-    public User? User { get; private set; }
+    private readonly List<AssignmentUser> _assignmentUsers = [];
+    public IReadOnlyList<AssignmentUser> AssignmentUsers => _assignmentUsers;
 
     internal static DomainResult<Assignment> Create(
         ProjectId projectId,
@@ -57,10 +57,29 @@ public sealed class Assignment : Entity<AssignmentId>
             Description = description,
             EstimatedHours = estimatedHours,
             Status = assignmentStatusResult.Value,
-            UserId = userId
         };
+
+        if (userId is not null)
+        {
+            assignment.AssignUser(userId, false);
+        }
+
         return DomainResult<Assignment>.Success(assignment);
     }
+
+    public DomainResult AssignUser(UserId userId, bool userAlreadyAssigned) 
+    {
+        if (userAlreadyAssigned)
+        {
+            return DomainResult.Failure([DomainErrors.AssignmentErrors.USER_ALREADY_ASSIGNED]);
+        }
+
+        AssignmentUser assignmentUser = AssignmentUser.Create(Id, userId);
+        _assignmentUsers.Add(assignmentUser);
+
+        return DomainResult.Success();
+    }
+
 
     internal DomainResult UpdateDetails(
         string? title,

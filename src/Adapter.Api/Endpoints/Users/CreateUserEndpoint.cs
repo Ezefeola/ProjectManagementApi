@@ -1,4 +1,4 @@
-﻿using Adapter.Api.Endpoints.Abstractions;
+﻿using MinimalApi.Endpoints.Organizer.Abstractions;
 using Core.Contracts.DTOs.Users.Request;
 using Core.Contracts.DTOs.Users.Response;
 using Core.Contracts.Results;
@@ -7,7 +7,7 @@ using Core.Domain.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Adapter.Api.Endpoints.Users;
-public class CreateUserEndpoint : IEndpoint<UserEndpointsGroup>
+public class CreateUserEndpoint : IEndpoint<UserEndpointsConfiguration>
 {
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {

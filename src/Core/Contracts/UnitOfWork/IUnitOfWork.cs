@@ -6,8 +6,9 @@ public interface IUnitOfWork
 {
     public IUserRepository UserRepository { get; }
     public IProjectRepository ProjectRepository { get; }
-    public IAssignmentRepository AssignmentRepository { get; }
     public IProjectUserRepository ProjectUserRepository { get; }
+    public IAssignmentRepository AssignmentRepository { get; }
+    public IAssignmentUserRepository AssignmentUserRepository { get; }
 
     public Task<SaveResult> CompleteAsync(CancellationToken cancellationToken = default);
     public Task BeginTransactionAsync(CancellationToken cancellationToken = default);

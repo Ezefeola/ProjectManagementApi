@@ -20,10 +20,6 @@ public class AssignmentConfiguration : EntityTypeBaseConfiguration<Assignment>
         builder.HasOne(x => x.Project)
                .WithMany(x => x.Assignments)
                .HasForeignKey(x => x.ProjectId);
-
-        builder.HasOne(x => x.User)
-               .WithMany()
-               .HasForeignKey(x => x.UserId);
     }
 
     protected override void ConfigurateProperties(EntityTypeBuilder<Assignment> builder)

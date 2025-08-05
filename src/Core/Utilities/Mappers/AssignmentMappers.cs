@@ -14,7 +14,7 @@ public static class AssignmentMappers
             EstimatedHours = assignment.EstimatedHours,
             Status = assignment.Status.Value,
             LoggedHours = assignment.LoggedHours,
-            UserId = assignment.UserId?.Value
+            UserIds = [.. assignment.AssignmentUsers.Select(x => x.UserId.Value)]
         };
     }
 }

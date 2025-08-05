@@ -1,15 +1,15 @@
-﻿using Adapter.Api.Endpoints.Abstractions;
+﻿using MinimalApi.Endpoints.Organizer.Abstractions;
 using Core.Contracts.Results;
 using Core.Contracts.UseCases.Assignments;
 using Core.Domain.Projects.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Adapter.Api.Endpoints.Assignments;
-public class DeleteAssignmentEndpoint : IEndpoint<AssignmentEndpointsGroup>
+public class DeleteAssignmentEndpoint : IEndpoint<AssignmentEndpointsConfiguration>
 {
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapDelete("{projectId:Guid}/assignment{assignmentId:Guid}", DeleteAssignmentHandler)
+        return app.MapDelete("/{assignmentId:Guid}", DeleteAssignmentHandler)
                   .WithName("DeleteAssignment")
                   .Produces<Result>(StatusCodes.Status200OK)
                   .ProducesProblem(StatusCodes.Status400BadRequest)

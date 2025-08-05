@@ -11,20 +11,23 @@ public class UnitOfWork : IUnitOfWork
     public IProjectRepository ProjectRepository { get; }
     public IAssignmentRepository AssignmentRepository { get; }
     public IProjectUserRepository ProjectUserRepository { get; }
+    public IAssignmentUserRepository AssignmentUserRepository { get; }
 
     public UnitOfWork(
         ApplicationDbContext context,
         IUserRepository userRepository,
         IProjectRepository projectRepository,
+        IProjectUserRepository projectUserRepository,
         IAssignmentRepository assignmentRepository,
-        IProjectUserRepository projectUserRepository
+        IAssignmentUserRepository assignmentUserRepository
     )
     {
         _dbContext = context;
         UserRepository = userRepository;
         ProjectRepository = projectRepository;
-        AssignmentRepository = assignmentRepository;
         ProjectUserRepository = projectUserRepository;
+        AssignmentRepository = assignmentRepository;
+        AssignmentUserRepository = assignmentUserRepository;
     }
 
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)

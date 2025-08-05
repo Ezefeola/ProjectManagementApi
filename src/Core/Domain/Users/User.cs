@@ -37,6 +37,8 @@ public sealed class User : Entity<UserId>
     public UserRole Role { get; private set; } = default!;
     private readonly List<ProjectUser> _projectUsers = [];
     public IReadOnlyList<ProjectUser> ProjectUsers => _projectUsers;
+    private readonly List<AssignmentUser> _assignmentUsers = [];
+    public IReadOnlyList<AssignmentUser> AssignmentUsers => _assignmentUsers;
 
     public static DomainResult<User> Create(
         string firstName,
@@ -67,6 +69,7 @@ public sealed class User : Entity<UserId>
             Id = UserId.NewId(),
             EmailAddress = emailAddressResult.Value,
             FullName = fullNameResult.Value,
+            Password = password,
             Role = userRoleResult.Value,
         };
 

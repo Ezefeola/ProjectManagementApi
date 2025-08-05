@@ -1,12 +1,11 @@
-﻿using Adapter.Api.Endpoints.Abstractions;
-using Core.Contracts.DTOs.Projects.Response;
+﻿using MinimalApi.Endpoints.Organizer.Abstractions;
 using Core.Contracts.Results;
 using Core.Contracts.UseCases.Projects;
 using Core.Domain.Projects.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Adapter.Api.Endpoints.Projects;
-public class DeleteProjectEndpoint : IEndpoint<ProjectEndpointsGroup>
+public class DeleteProjectEndpoint : IEndpoint<ProjectEndpointsConfiguration>
 {
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {

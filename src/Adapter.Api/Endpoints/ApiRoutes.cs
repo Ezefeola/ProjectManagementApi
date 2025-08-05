@@ -2,7 +2,9 @@
 {
     public static class ApiRoutes
     {
-        public const string Project = "project";
-        public const string Assignment = "assignment";
+        public const string Projects = "projects";
+        public const string Assignments = "assignments";
+        public const string Users = "users";
+        public const string Auth = "auth";
     }
 }

@@ -9,5 +9,5 @@ public sealed record AssignmentResponseDto
     public decimal? EstimatedHours { get; set; } = default!;
     public decimal? LoggedHours { get; set; } = default!;
     public AssignmentStatus.AssignmentStatusEnum Status { get; set; } = default!;
-    public Guid? UserId { get; set; }
+    public List<Guid> UserIds { get; set; } = [];
 }

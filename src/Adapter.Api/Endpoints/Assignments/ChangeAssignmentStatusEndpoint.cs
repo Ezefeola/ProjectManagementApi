@@ -1,4 +1,4 @@
-﻿using Adapter.Api.Endpoints.Abstractions;
+﻿using MinimalApi.Endpoints.Organizer.Abstractions;
 using Core.Contracts.DTOs.Assignment.Request;
 using Core.Contracts.DTOs.Assignment.Response;
 using Core.Contracts.Results;
@@ -7,11 +7,11 @@ using Core.Domain.Projects.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Adapter.Api.Endpoints.Assignments;
-public class ChangeAssignmentStatusEndpoint : IEndpoint<AssignmentEndpointsGroup>
+public class ChangeAssignmentStatusEndpoint : IEndpoint<AssignmentEndpointsConfiguration>
 {
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapPatch("/{projectId:Guid}/assignment/{assignmentId:Guid}/status", ChangeAssignmentStatusHandler)
+        return app.MapPatch("/{assignmentId:Guid}" + "/status", ChangeAssignmentStatusHandler)
                   .WithName("ChangeAssignmentStatus")
                   .Produces<Result<CreateAssignmentResponseDto>>(StatusCodes.Status204NoContent)
                   .ProducesProblem(StatusCodes.Status400BadRequest)

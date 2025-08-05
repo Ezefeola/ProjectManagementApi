@@ -1,12 +1,12 @@
-﻿using Adapter.Api.Endpoints.Abstractions;
-using Core.Contracts.DTOs.Auth.Request;
+﻿using Core.Contracts.DTOs.Auth.Request;
 using Core.Contracts.DTOs.Auth.Response;
 using Core.Contracts.Results;
 using Core.Contracts.UseCases.Auth;
 using Microsoft.AspNetCore.Mvc;
+using MinimalApi.Endpoints.Organizer.Abstractions;
 
 namespace Adapter.Api.Endpoints.Auth;
-public class LoginEndpoint : IEndpoint<AuthEndpointsGroup>
+public class LoginEndpoint : IEndpoint<AuthEndpointsConfiguration>
 {
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {

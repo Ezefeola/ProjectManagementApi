@@ -108,6 +108,28 @@ public sealed class Project : AggregateRoot<ProjectId>
         return DomainResult.Success();
     }
 
+    public DomainResult AssignUserToAssignment(
+        AssignmentId assignmentId, 
+        UserId userId,
+        bool userAlreadyAssigned
+    )
+    {
+        Assignment? assignment = _assignments.FirstOrDefault(x => x.Id == assignmentId);
+        if(assignment is null)
+        {
+            return DomainResult.Failure([DomainErrors.AssignmentErrors.ASSIGNMENT_NOT_FOUND]);
+        }
+
+        DomainResult assignUserToAssignmentResult = assignment.AssignUser(userId, userAlreadyAssigned);
+        if(!assignUserToAssignmentResult.IsSuccess)
+        {
+            return DomainResult.Failure(assignUserToAssignmentResult.Errors);
+        }
+
+        MarkAsUpdated();
+        return DomainResult.Success();
+    }
+
     public DomainResult UpdateAssignmentDetails(
         AssignmentId assignmentId,
         string? title, 

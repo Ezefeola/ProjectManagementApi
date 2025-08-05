@@ -1,4 +1,4 @@
-﻿using Adapter.Api.Endpoints.Abstractions;
+﻿using MinimalApi.Endpoints.Organizer.Abstractions;
 using Core.Contracts.Results;
 using Core.Contracts.UseCases.Projects;
 using Core.Domain.Projects.ValueObjects;
@@ -6,7 +6,7 @@ using Core.Domain.Users.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Adapter.Api.Endpoints.Projects;
-public class RemoveUserFromProjectEndpoint : IEndpoint<ProjectEndpointsGroup>
+public class RemoveUserFromProjectEndpoint : IEndpoint<ProjectEndpointsConfiguration>
 {
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {

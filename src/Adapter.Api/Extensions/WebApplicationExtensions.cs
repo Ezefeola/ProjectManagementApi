@@ -1,5 +1,6 @@
 ﻿using Adapter.Api.Filters;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using MinimalApi.Endpoints.Organizer.Extensions;
 using Scalar.AspNetCore;
 using System.Reflection;
 using System.Text.Json;
@@ -83,6 +84,7 @@ public static class WebApplicationExtensions
             options.ConfigureGroup = group =>
             {
                 group.AddEndpointFilter<ResultHttpCodeFilter>();
+                group.WithOpenApi();
             };
         });
     }

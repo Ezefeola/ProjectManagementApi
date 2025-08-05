@@ -51,6 +51,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<ICreateAssignment, CreateAssignment>()
                 .AddScoped<IUpdateAssignmentDetails, UpdateAssignmentDetails>()
-                .AddScoped<IDeleteAssignment, DeleteAssignment>();
+                .AddScoped<IDeleteAssignment, DeleteAssignment>()
+                .AddScoped<IAssignUserToAssignment, AssignUserToAssignment>();
     }
 }
