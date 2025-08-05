@@ -1,18 +1,15 @@
 ﻿using Adapter.Api.Endpoints.Abstractions;
-using Adapter.Api.Endpoints.Projects;
-using Core.Contracts.DTOs.Projects.Response;
 using Core.Contracts.Results;
 using Core.Contracts.UseCases.Assignments;
 using Core.Domain.Projects.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Adapter.Api.Endpoints.Assignments;
-public class DeleteAssignmentEndpoint : IEndpoint<ProjectEndpointsGroup>
+public class DeleteAssignmentEndpoint : IEndpoint<AssignmentEndpointsGroup>
 {
-    private readonly string route = "{projectId:Guid}"+$"/+{ApiRoutes.Projects.Assignments}"+"/{assignmentId:Guid}";
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapDelete(route, DeleteAssignmentHandler)
+        return app.MapDelete("{projectId:Guid}/assignment{assignmentId:Guid}", DeleteAssignmentHandler)
                   .WithName("DeleteAssignment")
                   .Produces<Result>(StatusCodes.Status200OK)
                   .ProducesProblem(StatusCodes.Status400BadRequest)

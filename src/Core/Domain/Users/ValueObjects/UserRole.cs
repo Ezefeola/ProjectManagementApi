@@ -38,8 +38,7 @@ public sealed record UserRole : ValueObject
 
         if (Value == userRole.Value)
         {
-            return DomainResult<UserRole>.Success(this)
-                                         .WithUpdatedFieldCount(0);
+            return DomainResult<UserRole>.Success(this);
         }
 
         Value = userRole.Value;

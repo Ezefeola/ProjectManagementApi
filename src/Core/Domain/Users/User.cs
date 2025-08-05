@@ -100,31 +100,22 @@ public sealed class User : Entity<UserId>
    )
     {
         List<string> errors = [];
-        int totalUpdatedCount = 0;
 
         DomainResult<User> fullNameResult = UpdateFullName(firstName, lastName);
         if (!fullNameResult.IsSuccess) errors.AddRange(fullNameResult.Errors);
-        totalUpdatedCount += fullNameResult.UpdatedFieldCount;
 
         DomainResult<User> emailResult = UpdateEmail(email);
         if (!emailResult.IsSuccess) errors.AddRange(emailResult.Errors);
-        totalUpdatedCount += emailResult.UpdatedFieldCount;
 
         DomainResult<User> userRoleResult = UpdateUserRole(userRole);
         if (!userRoleResult.IsSuccess) errors.AddRange(userRoleResult.Errors);
-        totalUpdatedCount += userRoleResult.UpdatedFieldCount;
 
         if (errors.Count > 0)
         {
             return DomainResult<User>.Failure(errors);
         }
 
-        string descriptionMessage = totalUpdatedCount > 0
-                                    ? $"User updated successfully. {totalUpdatedCount}"
-                                    : "No changes were made.";
-
-        return DomainResult<User>.Success(this)
-                                 .WithDescription(descriptionMessage);
+        return DomainResult<User>.Success(this);
     }
 
     public DomainResult<User> UpdateFullName(string? firstName, string? lastName)
@@ -136,19 +127,16 @@ public sealed class User : Entity<UserId>
         }
 
         FullName = fullNameResult.Value;
-        return DomainResult<User>.Success(this)
-                                 .WithUpdatedFieldCount(fullNameResult.UpdatedFieldCount);
+        return DomainResult<User>.Success(this);
     }
 
     public DomainResult<User> UpdateEmail(string? email)
     {
-        DomainResult<EmailAddress> emailAddressResult = EmailAddress.UpdateIfChanged(email);
+        DomainResult emailAddressResult = EmailAddress.UpdateIfChanged(email);
         if (!emailAddressResult.IsSuccess)
             return DomainResult<User>.Failure(emailAddressResult.Errors);
 
-        EmailAddress = emailAddressResult.Value;
-        return DomainResult<User>.Success(this)
-                                 .WithUpdatedFieldCount(emailAddressResult.UpdatedFieldCount);
+        return DomainResult<User>.Success(this);
     }
 
     public DomainResult<User> UpdateUserRole(UserRole.UserRolesEnum? userRole)
@@ -159,7 +147,6 @@ public sealed class User : Entity<UserId>
             return DomainResult<User>.Failure(userRoleResult.Errors);
         }
 
-        return DomainResult<User>.Success(this)
-                                 .WithUpdatedFieldCount(userRoleResult.UpdatedFieldCount);
+        return DomainResult<User>.Success(this);
     }
 }

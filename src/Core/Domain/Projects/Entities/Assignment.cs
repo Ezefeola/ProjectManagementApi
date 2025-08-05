@@ -62,7 +62,7 @@ public sealed class Assignment : Entity<AssignmentId>
         return DomainResult<Assignment>.Success(assignment);
     }
 
-    internal bool UpdateDetails(
+    internal DomainResult UpdateDetails(
         string? title,
         string? description,
         decimal? estimatedHours
@@ -91,8 +91,30 @@ public sealed class Assignment : Entity<AssignmentId>
         if (isUpdated)
         {
             MarkAsUpdated();
+            return DomainResult.Success()
+                               .WasUpdated();
         }
 
-        return isUpdated;
+        return DomainResult.Success();
+    }
+
+    internal DomainResult ChangeStatus(AssignmentStatus.AssignmentStatusEnum status)
+    {
+        DomainResult<AssignmentStatus> assignmentStatusResult = AssignmentStatus.Create(status);
+        if (!assignmentStatusResult.IsSuccess)
+        {
+            return DomainResult.Failure(assignmentStatusResult.Errors);
+        }
+
+        if(Status == assignmentStatusResult.Value)
+        {
+            return DomainResult.Success();
+        }
+
+        Status = assignmentStatusResult.Value;
+        MarkAsUpdated();
+
+        return DomainResult.Success()
+                           .WasUpdated();
     }
 }

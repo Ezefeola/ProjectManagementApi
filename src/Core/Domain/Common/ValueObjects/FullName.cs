@@ -42,8 +42,7 @@ public sealed record FullName : ValueObject
         if (updatedFirstName == FirstName && updatedLastName == LastName)
         {
             return DomainResult<FullName>.Success(this)
-                                         .WithDescription("FullName remains unchanged.")
-                                         .WithUpdatedFieldCount(0);
+                                         .WithDescription("FullName remains unchanged.");
         }
 
         OperationResult validationResult = Validate(updatedFirstName, updatedLastName);
@@ -52,13 +51,7 @@ public sealed record FullName : ValueObject
             return DomainResult<FullName>.Failure([..validationResult.Errors]);
         }
 
-        int updatedCount = 0;
-        if (updatedFirstName != FirstName) updatedCount++;
-        if (updatedLastName != LastName) updatedCount++;
-
-
-        return DomainResult<FullName>.Success(this)
-                                     .WithUpdatedFieldCount(updatedCount);
+        return DomainResult<FullName>.Success(this);
     }
 
     private static OperationResult Validate(string firstName, string lastName)

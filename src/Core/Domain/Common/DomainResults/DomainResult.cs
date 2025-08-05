@@ -4,7 +4,7 @@ public class DomainResult : IDomainResult
     public bool IsSuccess { get; private set; }
     public string Description { get; private set; } = string.Empty;
     public List<string> Errors { get; private set; } = [];
-    public int UpdatedFieldCount { get; private set; }
+    public bool IsUpdated { get; private set; } = false;
 
     protected DomainResult(bool isSuccess)
     {
@@ -22,9 +22,9 @@ public class DomainResult : IDomainResult
         return this;
     }
 
-    public DomainResult WithUpdatedFieldCount(int count)
+    public DomainResult WasUpdated()
     {
-        UpdatedFieldCount = count;
+        IsUpdated = true;
         return this;
     }
 
@@ -37,7 +37,7 @@ public sealed class DomainResult<TValue> : IDomainResult
     public bool IsSuccess { get; private set; }
     public string Description { get; private set; } = string.Empty;
     public List<string> Errors { get; private set; } = [];
-    public int UpdatedFieldCount { get; private set; }
+    public bool IsUpdated { get; private set; } = false;
 
     private TValue? _value;
     public TValue Value => IsSuccess && _value is not null ? _value : EmptyValue();
@@ -66,9 +66,9 @@ public sealed class DomainResult<TValue> : IDomainResult
         return this;
     }
 
-    public DomainResult<TValue> WithUpdatedFieldCount(int count)
+    public DomainResult<TValue> WasUpdated()
     {
-        UpdatedFieldCount = count;
+        IsUpdated = true;
         return this;
     }
 

@@ -1,4 +1,5 @@
 ﻿using Core.Contracts.Models;
+using Core.Contracts.Results;
 using Core.Domain.Abstractions;
 using Core.Domain.Common.DomainResults;
 using System.Text.RegularExpressions;
@@ -6,7 +7,7 @@ using System.Text.RegularExpressions;
 namespace Core.Domain.Common.ValueObjects;
 public sealed record EmailAddress : ValueObject
 {
-    public string Value { get; } = default!;
+    public string Value { get; private set; } = default!;
 
     private EmailAddress() { }
     private EmailAddress(string value) => Value = value;
@@ -27,25 +28,30 @@ public sealed record EmailAddress : ValueObject
         return DomainResult<EmailAddress>.Success(emailAddress)
                                          .WithDescription("EmailAddress created successfully.");
     }
-    public DomainResult<EmailAddress> UpdateIfChanged(string email)
+    public DomainResult UpdateIfChanged(string? email)
     {
+        if(email is null)
+        {
+            return DomainResult.Success();
+        }
         if (email == Value)
         {
-            return DomainResult<EmailAddress>.Success(this)
-                                             .WithDescription("EmailAddress remains unchanged.");
+            return DomainResult.Success()
+                               .WithDescription("EmailAddress remains unchanged.");
         }
        
-        OperationResult validationResult = Validate(email);
+        DomainResult validationResult = Validate(email);
         if (!validationResult.IsSuccess)
         {
-            return DomainResult<EmailAddress>.Failure([..validationResult.Errors]);
+            return DomainResult.Failure([..validationResult.Errors]);
         }
 
-        return DomainResult<EmailAddress>.Success(this)
-                                         .WithUpdatedFieldCount(1);
+        Value = email;
+
+        return DomainResult.Success();
     }
 
-    private static OperationResult Validate(string email)
+    private static DomainResult Validate(string email)
     {
         List<string> errors = [];
 
@@ -55,10 +61,10 @@ public sealed record EmailAddress : ValueObject
 
         if(errors.Count > 0)
         {
-            return OperationResult.Failure(errors);
+            return DomainResult.Failure(errors);
         }
 
-        return OperationResult.Success();
+        return DomainResult.Success();
     }
 
     private static bool IsValidEmail(string email)

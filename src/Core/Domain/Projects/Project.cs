@@ -121,8 +121,37 @@ public sealed class Project : AggregateRoot<ProjectId>
             return DomainResult.Failure([DomainErrors.AssignmentErrors.ASSIGNMENT_NOT_FOUND]);
         }
 
-        bool isUpdated = assignment.UpdateDetails(title, description, estimatedHours);
-        if(isUpdated)
+        DomainResult updateAssignmentDetailsResult = assignment.UpdateDetails(title, description, estimatedHours);
+        if(!updateAssignmentDetailsResult.IsSuccess) 
+        {
+            return DomainResult.Failure(updateAssignmentDetailsResult.Errors); 
+        }
+        if(updateAssignmentDetailsResult.IsUpdated)
+        {
+            MarkAsUpdated();
+        }
+
+        return DomainResult.Success();
+    }
+
+    public DomainResult ChangeAssignmentStatus(
+        AssignmentId assignmentId,
+        AssignmentStatus.AssignmentStatusEnum status
+    )
+    {
+        Assignment? assignment = _assignments.FirstOrDefault(x => x.Id == assignmentId);
+        if(assignment is null)
+        {
+            return DomainResult.Failure([DomainErrors.AssignmentErrors.ASSIGNMENT_NOT_FOUND]);
+        }
+
+        DomainResult changeAssignmentStatusResult =  assignment.ChangeStatus(status);
+        if(!changeAssignmentStatusResult.IsSuccess)
+        {
+            return DomainResult.Failure(changeAssignmentStatusResult.Errors);
+        }
+
+        if(changeAssignmentStatusResult.IsUpdated)
         {
             MarkAsUpdated();
         }

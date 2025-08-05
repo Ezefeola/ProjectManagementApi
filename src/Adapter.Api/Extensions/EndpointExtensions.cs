@@ -48,7 +48,10 @@ public static class EndpointExtensions
         PropertyInfo? groupNameProperty = groupType.GetProperty(nameof(IEndpointGroup.GroupName), BindingFlags.Public | BindingFlags.Static);
         string? groupName = (string?)groupNameProperty?.GetValue(null) ?? groupType.Name.ToLower();
 
-        string prefix = $"{endpointRegistrationOptions?.BasePrefix}/{groupName}".TrimStart('/').TrimEnd('/');
+        PropertyInfo? generalEndpointPrefix = groupType.GetProperty(nameof(IEndpointGroup.GeneralEndpointsPrefix), BindingFlags.Public | BindingFlags.Static);
+        string? endpointPrefix = (string?)generalEndpointPrefix?.GetValue(null) ?? groupType.Name.ToLower();
+
+        string prefix = $"{endpointRegistrationOptions?.BasePrefix}/{endpointPrefix}".TrimStart('/').TrimEnd('/');
 
         RouteGroupBuilder routeGroup = builder.MapGroup(prefix)
                                               .WithTags(groupName)
