@@ -49,7 +49,8 @@ public static class ServiceCollectionExtensions
 
     private static void AddAssignmentUseCases(this IServiceCollection services)
     {
-        services.AddScoped<ICreateAssignment, CreateAssignment>()
+        services.AddScoped<IGetAssignmentsForProject, GetAssignmentsForProject>()
+                .AddScoped<ICreateAssignment, CreateAssignment>()
                 .AddScoped<IUpdateAssignmentDetails, UpdateAssignmentDetails>()
                 .AddScoped<IDeleteAssignment, DeleteAssignment>()
                 .AddScoped<IAssignUserToAssignment, AssignUserToAssignment>();

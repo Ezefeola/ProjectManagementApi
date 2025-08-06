@@ -5,5 +5,5 @@ public record PaginatedResponseDto<TItems>
     public int PageSize { get; set; }
     public int TotalPages { get; set; }
     public int TotalRecords { get; set; }
-    public IEnumerable<TItems> Items { get; set; } = [];
+    public IReadOnlyList<TItems> Items { get; set; } = [];
 }

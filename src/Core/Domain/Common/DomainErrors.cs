@@ -29,6 +29,7 @@ public static class DomainErrors
         public static readonly string TITLE_TOO_LONG = $"The Title field cannot exceed {Assignment.Rules.TITLE_MAX_LENGTH}.";
         public static readonly string DESCRIPTION_TOO_LONG = $"The Description field cannot exceed {Assignment.Rules.TITLE_MAX_LENGTH}.";
         public static readonly string ASSIGNMENT_NOT_FOUND = $"Assignment not found.";
+        public static readonly string ASSIGNMENTS_NOT_FOUND = $"Assignments not found.";
         public static readonly string INVALID_USER_ASSIGNMENT = "Not able to give this assignment to the specified user, because it is not in the project.";
         public static readonly string USER_ALREADY_ASSIGNED = "The user is already assigned to this assignment.";
     }
