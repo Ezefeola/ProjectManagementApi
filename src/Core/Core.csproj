@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="UseCases\Assignments\Validators\" />
+    <Folder Include="UseCases\ProjectUserRoles\Validators\" />
   </ItemGroup>
 
 </Project>

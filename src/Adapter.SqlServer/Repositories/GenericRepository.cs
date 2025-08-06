@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 namespace Adapter.SqlServer.Repositories;
 public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IEntity
 {
-    protected readonly DbContext _context;
+    protected readonly DbContext _dbContext;
     protected readonly DbSet<TEntity> _dbSet;
 
     public GenericRepository(ApplicationDbContext context)
     {
-        _context = context;
+        _dbContext = context;
         _dbSet = context.Set<TEntity>();
     }
 

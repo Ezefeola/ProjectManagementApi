@@ -10,7 +10,7 @@ public class RemoveUserFromProjectEndpoint : IEndpoint<ProjectEndpointsConfigura
 {
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapDelete("/{projectId:Guid}/user/{userId:Guid}", RemoveUserFromProjectHandler)
+        return app.MapDelete("/{projectId:Guid}"+$"{ApiRoutes.Users}"+"{userId:Guid}", RemoveUserFromProjectHandler)
                   .WithName("RemoveUserFromProject")
                   .Produces<Result>(StatusCodes.Status200OK)
                   .ProducesProblem(StatusCodes.Status400BadRequest)

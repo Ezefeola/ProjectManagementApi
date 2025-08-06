@@ -1,4 +1,5 @@
-﻿using Core.Contracts.Models;
+﻿using Adapter.SqlServer.Repositories;
+using Core.Contracts.Models;
 using Core.Contracts.Repositories;
 using Core.Contracts.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ public class UnitOfWork : IUnitOfWork
     public IProjectRepository ProjectRepository { get; }
     public IAssignmentRepository AssignmentRepository { get; }
     public IProjectUserRepository ProjectUserRepository { get; }
+    public IProjectUserRoleRepository ProjectUserRoleRepository { get; }
     public IAssignmentUserRepository AssignmentUserRepository { get; }
 
     public UnitOfWork(
@@ -19,6 +21,7 @@ public class UnitOfWork : IUnitOfWork
         IProjectRepository projectRepository,
         IProjectUserRepository projectUserRepository,
         IAssignmentRepository assignmentRepository,
+        IProjectUserRoleRepository projectUserRoleRepository,
         IAssignmentUserRepository assignmentUserRepository
     )
     {
@@ -27,6 +30,7 @@ public class UnitOfWork : IUnitOfWork
         ProjectRepository = projectRepository;
         ProjectUserRepository = projectUserRepository;
         AssignmentRepository = assignmentRepository;
+        ProjectUserRoleRepository = projectUserRoleRepository;
         AssignmentUserRepository = assignmentUserRepository;
     }
 

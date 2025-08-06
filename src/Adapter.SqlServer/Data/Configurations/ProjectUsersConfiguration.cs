@@ -1,5 +1,4 @@
 ﻿using Core.Domain.Projects.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Adapter.SqlServer.Data.Configurations;
@@ -16,14 +15,15 @@ public class ProjectUsersConfiguration : EntityTypeBaseConfiguration<ProjectUser
         builder.HasOne(x => x.User)
                .WithMany(x => x.ProjectUsers)
                .HasForeignKey(x => x.UserId);
+
+        builder.HasOne(x => x.ProjectUserRole)
+              .WithMany()
+              .HasForeignKey(x => x.ProjectUserRoleId)
+              .IsRequired();
     }
 
     protected override void ConfigurateProperties(EntityTypeBuilder<ProjectUser> builder)
     {
-        builder.Property(x => x.Role)
-               .HasConversion<string>()
-               .HasColumnName(nameof(ProjectUser.Role));
-
         BaseEntityConfig.ApplyTo<ProjectUser>(builder);
     }
 }

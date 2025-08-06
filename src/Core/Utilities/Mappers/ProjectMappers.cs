@@ -28,14 +28,6 @@ public static class ProjectMappers
         };
     }
 
-    public static CreateAssignmentResponseDto ToCreateAssignmentResponseDto(this Project project)
-    {
-        return new CreateAssignmentResponseDto()
-        {
-            ProjectResponseDto = project.ToProjectResponseDto()
-        };
-    }
-
     public static GetProjectsResponseDto ToGetProjectsResponseDto(
         this IEnumerable<Project> projects, 
         GetProjectsRequestDto parametersRequestDto,
@@ -57,6 +49,22 @@ public static class ProjectMappers
         return new GetProjectByIdResponseDto()
         {
             ProjectResponseDto = project.ToProjectResponseDto()
+        };
+    }
+
+    public static GetProjectsForUserResponseDto ToGetProjectsForUserResponseDto(
+        this IEnumerable<Project> projects,
+        GetProjectsForUserRequestDto parametersRequestDto,
+        int totalProjectsForUser
+    )
+    {
+        return new GetProjectsForUserResponseDto()
+        {
+            PageIndex = parametersRequestDto.GetPageIndex(),
+            PageSize = parametersRequestDto.GetPageSize(),
+            TotalPages = parametersRequestDto.GetTotalPages(totalProjectsForUser),
+            TotalRecords = totalProjectsForUser,
+            Items = [.. projects.Select(project => project.ToProjectResponseDto())]
         };
     }
 }

@@ -1,4 +1,4 @@
-﻿using Core.Domain.Projects.Entities;
+﻿using Core.Contracts.DTOs.ProjectUserRoles.Response;
 
 namespace Core.Contracts.DTOs.Projects.Response;
 public sealed record GetUserForProjectResponseDto
@@ -7,5 +7,5 @@ public sealed record GetUserForProjectResponseDto
     public string FirstName { get; set; } = default!;
     public string LastName { get; set; } = default!;
     public string EmailAddress { get; set; } = default!;
-    public ProjectUser.ProjectUserRoleEnum Role { get; set; }
+    public ProjectUserRoleResponseDto ProjectUserRoleResponseDto { get; set; } = default!;
 }

@@ -5,7 +5,7 @@ public class UserEndpointsConfiguration : EndpointsConfiguration
 {
     public UserEndpointsConfiguration()
     {
-        WithPrefix("/user");
-        WithTags("user");
+        WithPrefix(ApiRoutes.Users);
+        WithTags(ApiRoutes.Users);
     }
 }

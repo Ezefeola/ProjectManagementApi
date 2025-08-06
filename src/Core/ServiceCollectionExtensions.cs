@@ -2,9 +2,11 @@
 using Core.Contracts.UseCases.Assignments;
 using Core.Contracts.UseCases.Auth;
 using Core.Contracts.UseCases.Projects;
+using Core.Contracts.UseCases.ProjectUserRoles;
 using Core.Contracts.UseCases.Users;
 using Core.UseCases.Assignments;
 using Core.UseCases.Projects;
+using Core.UseCases.ProjectUserRoles;
 using Core.UseCases.Users;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
@@ -28,6 +30,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddUserUseCases();
         services.AddProjectUseCases();
+        services.AddProjectUserRoleUseCases();
         services.AddAssignmentUseCases();
     }
     private static void AddUserUseCases(this IServiceCollection services)
@@ -39,12 +42,18 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IGetProjects, GetProjects>()
                 .AddScoped<IGetProjectById, GetProjectById>()
+                .AddScoped<IGetProjectsForUser, GetProjectsForUser>()
                 .AddScoped<ICreateProject, CreateProject>()
                 .AddScoped<IUpdateProjectDetails, UpdateProjectDetails>()
                 .AddScoped<IDeleteProject, DeleteProject>()
                 .AddScoped<IGetUsersForProject, GetUsersForProject>()
                 .AddScoped<IAssignUserToProject, AssignUserToProject>()
                 .AddScoped<IRemoveUserFromProject, RemoveUserFromProject>();
+    }
+    private static void AddProjectUserRoleUseCases(this IServiceCollection services)
+    {
+        services.AddScoped<IGetProjectUserRoles, GetProjectUserRoles>()
+                .AddScoped<ICreateProjectUserRole, CreateProjectUserRole>();
     }
 
     private static void AddAssignmentUseCases(this IServiceCollection services)

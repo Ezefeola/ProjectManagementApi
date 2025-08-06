@@ -92,7 +92,7 @@ public sealed class Project : AggregateRoot<ProjectId>
 
     public DomainResult AssignUser(
         UserId userId, 
-        ProjectUser.ProjectUserRoleEnum role, 
+        ProjectUserRoleId projectUserRoleId, 
         bool isUserAssigned
     )
     {
@@ -101,7 +101,7 @@ public sealed class Project : AggregateRoot<ProjectId>
             return DomainResult.Failure([DomainErrors.ProjectErrors.USER_ALREADY_ASSIGNED]);
         }
 
-        ProjectUser projectUser = ProjectUser.Create(Id, userId, role);
+        ProjectUser projectUser = ProjectUser.Create(Id, userId, projectUserRoleId);
         _projectUsers.Add(projectUser);
         MarkAsUpdated();
 

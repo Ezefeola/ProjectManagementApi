@@ -1,4 +1,5 @@
 ﻿using Core.Contracts.DTOs.Projects.Request;
+using Core.Contracts.Models;
 using Core.Contracts.Results;
 using Core.Contracts.UnitOfWork;
 using Core.Contracts.UseCases.Projects;
@@ -26,13 +27,7 @@ public class AssignUserToProject : IAssignUserToProject
     )
     {
         UserId userId = UserId.Create(requestDto.UserId);
-
-        Project? project = await _unitOfWork.ProjectRepository.GetByIdAsync(projectId, cancellationToken);
-        if (project is null)
-        {
-            return Result.Failure(HttpStatusCode.NotFound)
-                         .WithErrors([DomainErrors.ProjectErrors.PROJECT_NOT_FOUND]);
-        }
+        ProjectUserRoleId projectUserRoleId = ProjectUserRoleId.Create(requestDto.ProjectUserRoleId);
 
         bool userExists = await _unitOfWork.UserRepository.ExistsByIdAsync(userId, cancellationToken);
         if (!userExists)
@@ -41,15 +36,33 @@ public class AssignUserToProject : IAssignUserToProject
                          .WithErrors([DomainErrors.UserErrors.USER_DOES_NOT_EXIST]);
         }
 
+        bool projectUserRoleExists = await _unitOfWork.ProjectUserRoleRepository.ProjectUserRoleExistsAsync(projectUserRoleId, cancellationToken);
+        if (!projectUserRoleExists)
+        {
+            return Result.Failure(HttpStatusCode.BadRequest).WithErrors(["Project user role not found."]);
+        }
+
+        Project? project = await _unitOfWork.ProjectRepository.GetByIdAsync(projectId, cancellationToken);
+        if (project is null)
+        {
+            return Result.Failure(HttpStatusCode.NotFound)
+                         .WithErrors([DomainErrors.ProjectErrors.PROJECT_NOT_FOUND]);
+        }
+
         bool isUserAssigned = await _unitOfWork.ProjectUserRepository.IsUserAssignedToProjectAsync(projectId, userId, cancellationToken);
-        DomainResult assignUserToProjectResult = project.AssignUser(userId, requestDto.Role, isUserAssigned);
+        DomainResult assignUserToProjectResult = project.AssignUser(userId, projectUserRoleId, isUserAssigned);
         if (!assignUserToProjectResult.IsSuccess)
         {
             return Result.Failure(HttpStatusCode.BadRequest)
                          .WithErrors(assignUserToProjectResult.Errors);
         }
 
-        await _unitOfWork.CompleteAsync(cancellationToken);
+       SaveResult saveResult = await _unitOfWork.CompleteAsync(cancellationToken);
+        if(!saveResult.IsSuccess)
+        {
+            return Result.Failure(HttpStatusCode.BadRequest)
+                         .WithErrors([saveResult.ErrorMessage]);
+        }
 
         return Result.Success(HttpStatusCode.NoContent);
     }

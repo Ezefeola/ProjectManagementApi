@@ -1,5 +1,6 @@
 ﻿using Core.Contracts.DTOs.Assignment.Request;
 using Core.Contracts.DTOs.Assignment.Response;
+using Core.Domain.Projects;
 using Core.Domain.Projects.Entities;
 using Core.Utilities.QueryOptions.Pagination;
 
@@ -33,6 +34,14 @@ public static class AssignmentMappers
             TotalPages = parametersRequestDto.GetTotalPages(totalAssignmentsForProject),
             TotalRecords = totalAssignmentsForProject,
             Items = [.. assignments.Select(assignment => assignment.ToAssignmentResponseDto())]
+        };
+    }
+
+    public static CreateAssignmentResponseDto ToCreateAssignmentResponseDto(this Project project)
+    {
+        return new CreateAssignmentResponseDto()
+        {
+            ProjectResponseDto = project.ToProjectResponseDto()
         };
     }
 }

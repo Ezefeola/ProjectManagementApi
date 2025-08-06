@@ -10,7 +10,7 @@ public class GetUsersForProjectEndpoint : IEndpoint<ProjectEndpointsConfiguratio
 {
     public RouteHandlerBuilder MapEndpoint(IEndpointRouteBuilder app)
     {
-        return app.MapGet("/{projectId:Guid}/users", GetUsersForProjectHandler)
+        return app.MapGet("/{projectId:Guid}" + $"{ApiRoutes.Users}", GetUsersForProjectHandler)
                   .WithName("GetUsersForProject")
                   .Produces<Result<IEnumerable<GetUserForProjectResponseDto>>>(StatusCodes.Status200OK)
                   .ProducesProblem(StatusCodes.Status404NotFound)

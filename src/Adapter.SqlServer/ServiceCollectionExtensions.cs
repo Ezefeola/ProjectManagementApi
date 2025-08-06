@@ -53,6 +53,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IProjectRepository, ProjectRepository>()
                 .AddScoped<IProjectUserRepository, ProjectUserRepository>()
+                .AddScoped<IProjectUserRoleRepository, ProjectUserRoleRepository>()
                 .AddScoped<IAssignmentRepository, AssignmentRepository>()
                 .AddScoped<IAssignmentUserRepository, AssignmentUserRepository>();
     }

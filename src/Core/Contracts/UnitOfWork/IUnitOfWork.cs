@@ -7,6 +7,7 @@ public interface IUnitOfWork
     public IUserRepository UserRepository { get; }
     public IProjectRepository ProjectRepository { get; }
     public IProjectUserRepository ProjectUserRepository { get; }
+    public IProjectUserRoleRepository ProjectUserRoleRepository { get; }
     public IAssignmentRepository AssignmentRepository { get; }
     public IAssignmentUserRepository AssignmentUserRepository { get; }
 

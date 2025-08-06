@@ -34,7 +34,15 @@ public static class DomainErrors
         public static readonly string USER_ALREADY_ASSIGNED = "The user is already assigned to this assignment.";
     }
 
-    public static class ProjectErrors
+    public static class ProjectUserRoleErrors
+    {
+        public static readonly string PROJECT_USER_ROLES_NOT_FOUND = $"Roles not found.";
+        public static readonly string NAME_NOT_EMPTY = "The Name field cannot be empty.";
+        public static readonly string NAME_TOO_LONG = $"The Name field cannot exceed {ProjectUserRole.Rules.NAME_MAX_LENGTH}.";
+        public static readonly string NAME_ALREAD_EXISTS = $"A role with the specified name already exists.";
+    }
+
+        public static class ProjectErrors
     {
         public static readonly string NAME_NOT_EMPTY = "The Name field cannot be empty.";
         public static readonly string NAME_TOO_LONG = $"The Name field cannot exceed {Project.Rules.NAME_MAX_LENGTH} characters.";
@@ -44,6 +52,7 @@ public static class DomainErrors
         public static readonly string INVALID_STATUS = "Invalid status assignment, please assign a correct one.";
         public static readonly string INVALID_ASSIGNMENT_PROJECT_COMPLETED = "Cannot add an assignment to a completed project.";
         public static readonly string PROJECT_NOT_FOUND = "Project not found.";
+        public static readonly string PROJECTS_NOT_FOUND = "Projects not found.";
         public static readonly string USER_ALREADY_ASSIGNED = "User already assigned to the project.";
         public static readonly string USER_NOT_ASSIGNED = "User is not assigned to the project.";
     }   
