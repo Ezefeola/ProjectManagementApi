@@ -32,6 +32,22 @@ namespace Adapter.SqlServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProjectUserRole",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProjectUserRole", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -84,7 +100,7 @@ namespace Adapter.SqlServer.Migrations
                 {
                     ProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProjectUserRoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "GETDATE()"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -93,6 +109,12 @@ namespace Adapter.SqlServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProjectUser", x => new { x.ProjectId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_ProjectUser_ProjectUserRole_ProjectUserRoleId",
+                        column: x => x.ProjectUserRoleId,
+                        principalTable: "ProjectUserRole",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProjectUser_Project_ProjectId",
                         column: x => x.ProjectId,
@@ -170,9 +192,26 @@ namespace Adapter.SqlServer.Migrations
                 filter: "IsDeleted = 0");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProjectUser_ProjectUserRoleId",
+                table: "ProjectUser",
+                column: "ProjectUserRoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProjectUser_UserId",
                 table: "ProjectUser",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProjectUserRole_IsDeleted",
+                table: "ProjectUserRole",
+                column: "IsDeleted",
+                filter: "IsDeleted = 0");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProjectUserRole_Name",
+                table: "ProjectUserRole",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_EmailAddress",
@@ -198,6 +237,9 @@ namespace Adapter.SqlServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Assignment");
+
+            migrationBuilder.DropTable(
+                name: "ProjectUserRole");
 
             migrationBuilder.DropTable(
                 name: "User");

@@ -13,8 +13,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Adapter.SqlServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250806184338_ProjectUserRoleAdded")]
-    partial class ProjectUserRoleAdded
+    [Migration("20250808223710_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -193,6 +193,9 @@ namespace Adapter.SqlServer.Migrations
 
                     b.HasIndex("IsDeleted")
                         .HasFilter("IsDeleted = 0");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("ProjectUserRole");
                 });
